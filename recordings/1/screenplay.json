@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "metadata": {
+    "source_recording": "1",
+    "generated_at": "2026-01-22T21:08:39.328555+00:00",
+    "source_url": "https://reddit.com",
+    "title": "Reddit Feed Navigation and Header Interactions",
+    "description": "A test script that browses the Reddit guest feed, verifying different types of posts and ads, interacts with the search bar to check the trending dropdown, and tests the header's overflow menu and tooltips."
+  },
+  "steps": [
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 0.0,
+        "end_secs": 16.9
+      },
+      "description": "Scroll down the Reddit home feed."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 16.946402367997507
+      },
+      "description": "Verify the post 'What is this blue stick I found in my trash bin?' is visible.",
+      "screenshot": "screenshots/0/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 17.0,
+        "end_secs": 21.9
+      },
+      "description": "Continue scrolling down the feed past the first post."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 21.91152102399792
+      },
+      "description": "Verify the Amazon advertisement is visible.",
+      "screenshot": "screenshots/1/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 22.0,
+        "end_secs": 24.5
+      },
+      "description": "Scroll further down the feed."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 24.527027509997424
+      },
+      "description": "Verify the AskReddit post starting with 'If all personal wealth...' is visible.",
+      "screenshot": "screenshots/2/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 24.6,
+        "end_secs": 27.3
+      },
+      "description": "Scroll to the next image post."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 27.346021124998515
+      },
+      "description": "Verify the 'Favorite actress' meme post is visible.",
+      "screenshot": "screenshots/3/screenshot.png"
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 33.437702672999876
+      },
+      "description": "Ensure the page is stable before interacting with the header.",
+      "screenshot": "screenshots/4/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 33.5,
+        "end_secs": 40.0
+      },
+      "description": "Click on the 'Find anything' search bar at the top of the page."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 40.029226298996946
+      },
+      "description": "Verify the 'Trending' search dropdown menu appears with suggested topics.",
+      "screenshot": "screenshots/5/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 40.1,
+        "end_secs": 47.3
+      },
+      "description": "Click outside the search menu to close it."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 47.384273812000174
+      },
+      "description": "Verify the search dropdown is closed and the feed is fully visible again.",
+      "screenshot": "screenshots/6/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 47.4,
+        "end_secs": 51.5
+      },
+      "description": "Click the '...' (three dots) button in the top right header."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 51.56304350099526
+      },
+      "description": "Verify the overflow settings menu is open.",
+      "screenshot": "screenshots/7/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 51.6,
+        "end_secs": 62.5
+      },
+      "description": "Close the menu and hover over the '...' button."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 62.543257815996185
+      },
+      "description": "Verify the 'Open settings menu' tooltip appears on hover.",
+      "screenshot": "screenshots/8/screenshot.png"
+    }
+  ]
+}

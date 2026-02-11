@@ -53,6 +53,8 @@
           config.allowUnfree = true;
         };
 
+        inherit (pkgs) lib;
+
         pythonSet = (pkgs.callPackage pyproject-nix.build.packages {
           python = pkgs.python312;
         }).overrideScope
@@ -68,20 +70,107 @@
 
         agentBrowser = pkgs.callPackage ./nix/agent-browser.nix { };
 
-        CHROMIUM_EXECUTABLE = pkgs.lib.getExe pkgs.chromium;
+        geminiCli = pkgs.callPackage ./agents/gemini/nix { };
+
+        CHROMIUM_EXECUTABLE = lib.getExe pkgs.chromium;
+
+        # Agent template directory (copied into workspace at runtime)
+        agentDir = ./agents/gemini;
+
+        # Wrapper that sets up an isolated workspace and launches Gemini CLI
+        geminiClone = pkgs.writeShellScriptBin "gemini-clone" ''
+          set -euo pipefail
+
+          # Validate API key
+          if [ -z "''${GEMINI_API_KEY:-}" ]; then
+            echo "ERROR: GEMINI_API_KEY must be set" >&2
+            exit 1
+          fi
+
+          # Workspace is the first argument or current directory
+          WORKSPACE="''${1:-.}"
+          shift || true
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+          mkdir -p "$WORKSPACE"
+          cd "$WORKSPACE"
+          WORKSPACE_ROOT="$PWD"
+
+          # Copy agent context into workspace (mutable copies - Gemini writes to .gemini/)
+          if [ ! -f GEMINI.md ]; then
+            cp ${agentDir}/GEMINI.md ./GEMINI.md
+          fi
+          if [ ! -d .gemini ]; then
+            cp -r ${agentDir}/.gemini ./.gemini
+            chmod -R u+w ./.gemini
+          fi
+
+          # Provision recordings (idempotent)
+          if [ ! -d recordings ] && [ -d "$RECORDINGS_SRC" ]; then
+            cp -r "$RECORDINGS_SRC" ./recordings
+            chmod -R u+w ./recordings
+          fi
+
+          # Isolate Gemini global config per workspace (at workspace root, not clone/)
+          export GEMINI_CLI_HOME="$WORKSPACE_ROOT/.gemini-home"
+          mkdir -p "$GEMINI_CLI_HOME"
+
+          # Browser automation
+          export CHROMIUM_PATH="${CHROMIUM_EXECUTABLE}"
+          export AGENT_BROWSER_EXECUTABLE_PATH="${CHROMIUM_EXECUTABLE}"
+
+          # Tools on PATH
+          export PATH="${lib.makeBinPath [
+            geminiCli
+            virtualenv
+            agentBrowser
+            pkgs.nodejs_24
+            pkgs.chromium
+            pkgs.ffmpeg
+            pkgs.jujutsu
+            pkgs.git
+          ]}:$PATH"
+
+          # Pre-configure trust and yolo mode in GEMINI_CLI_HOME if not already set
+          mkdir -p "$GEMINI_CLI_HOME/.gemini"
+          if [ ! -f "$GEMINI_CLI_HOME/.gemini/trustedFolders.json" ]; then
+            echo "{\"$WORKSPACE_ROOT/clone\": \"TRUST_FOLDER\"}" > "$GEMINI_CLI_HOME/.gemini/trustedFolders.json"
+          fi
+
+          # Clone output directory — agent builds here
+          mkdir -p clone
+          ln -sfn ../recordings clone/recordings
+          cd clone
+
+          # Launch Gemini (use --yolo for non-interactive, omit for TUI)
+          exec ${lib.getExe geminiCli} -m gemini-3.1-pro-preview "$@"
+        '';
       in
       {
-        packages.agentBrowser = agentBrowser;
+        packages = {
+          agentBrowser = agentBrowser;
+          gemini-cli = geminiCli;
+          gemini-clone = geminiClone;
+        };
+
+        apps = {
+          gemini-clone = {
+            type = "app";
+            program = lib.getExe geminiClone;
+          };
+        };
 
         devShells.default = pkgs.mkShell {
           packages = [
             virtualenv
             agentBrowser
+            geminiCli
           ] ++ (with pkgs; [
             uv
             chromium
             ffmpeg
             nodejs_24
+            jujutsu
+            git
           ]);
           env = {
             UV_NO_SYNC = "1";

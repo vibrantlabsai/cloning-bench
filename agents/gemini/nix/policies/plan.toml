@@ -1,0 +1,31 @@
+# Source: google-gemini/gemini-cli packages/core/src/policy/policies/plan.toml
+
+# Catch-All: Deny everything by default in Plan mode.
+
+[[rule]]
+decision = "deny"
+priority = 60
+modes = ["plan"]
+deny_message = "You are in Plan Mode with access to read-only tools. Execution of scripts (including those from skills) is blocked."
+
+# Explicitly Allow Read-Only Tools in Plan mode.
+
+[[rule]]
+toolName = ["glob", "grep_search", "list_directory", "read_file", "google_web_search", "activate_skill"]
+decision = "allow"
+priority = 70
+modes = ["plan"]
+
+[[rule]]
+toolName = ["ask_user", "exit_plan_mode"]
+decision = "ask_user"
+priority = 70
+modes = ["plan"]
+
+# Allow write_file and replace for .md files in plans directory
+[[rule]]
+toolName = ["write_file", "replace"]
+decision = "allow"
+priority = 70
+modes = ["plan"]
+argsPattern = "\"file_path\":\"[^\"]+/\\.gemini/tmp/[a-zA-Z0-9_-]+/plans/[a-zA-Z0-9_-]+\\.md\""

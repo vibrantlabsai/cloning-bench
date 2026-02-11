@@ -1,0 +1,968 @@
+{
+  "assets": [
+    {
+      "url": "https://www.googletagmanager.com/gtag/js?id=AW-788729857",
+      "hash": "ae3885807d21e591d0f66062fa22476b902552be97b7cc9fce9d940faf36a0b8"
+    },
+    {
+      "url": "https://alb.reddit.com/skatepark?IDLT=Xc1550qdjhsJ5W9hlSRaLGU-VwpHc-LmfsCAziIq_krP7uJXU",
+      "hash": "6a842ea462daca2a0b5a0f5f25bcfc8e0059ac811ca6c6a1bc54e4d9119621c3"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/comment-preview-unit-client-css-CES0qfzD.css",
+      "hash": "f5c284c0c7c96216b3110b4f3163444a8535a4e6728b481815abed38af5b1b21"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/nsfw-bypassable-modal-client-css-BQOI-7PB.css",
+      "hash": "d433ac4eefbd4cdcd0e1c69651a41c4f5a1834115f5b9f847a5c1b2eda81573a"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/google-one-tap-client-css-C556qdmX.css",
+      "hash": "52f69db82074a17e341af9e0757ec61793a1bd4d8ee1e34fd7007bbbdbfa447b"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/search-input-desktop-client-css-tgqsYgQD.css",
+      "hash": "3c6b94f968dd1eb88285388218b5d0ce61681aa674f1f4200e359b71e65d5941"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/header-large-client-css-Du4QHoPm.css",
+      "hash": "772a0624f58c629a5ce687077340dfe6e35f8c2b7c03b05b8693bcf276ba3ae3"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/en-US/5r73EsgItq.js",
+      "hash": "c042c3b3abeb4250aa4abdb30597143fd108f04c22c5616a02560e5fa37ff3d3"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/hui-grid-client-css-DP-dfyG4.css",
+      "hash": "5471a7d875143b20374adeabf7dd506c3fde36b82959e05b9b37d4f1c2b1e440"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/qr-code-persistent-button-upsell-client-css-Bgh5zqyM.css",
+      "hash": "09645bda2c4d4e01117933f46ca94308703f17d02929fa478c1f0d65cfbd438f"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/header-client-css-BYPk6fcZ.css",
+      "hash": "221406e024234c8a67f2dbd7d4c1bdc43b05f5120589a0544f5059d12d50e263"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/home-feed-client-css-COjhM6yH.css",
+      "hash": "688f522ea6194e67b6360d09c27b8d102f7c2b3533ecb05f2cb7b312419e4f48"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/suspense-CXj3GtT5.js",
+      "hash": "ecb383e08c1629dc2da67608917daaa8381d4cb946e4e50480476f535164af4a"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/en-US/BF54mnDvLm.js",
+      "hash": "d2d77ea4dc746daa683cb9922bc654110d723e4b85ddfc07e3894a5860d89d14"
+    },
+    {
+      "url": "https://www.redditstatic.com/js/concat?prefix=en-US/&chunks=-mCmBlR1G3,1AI2ybFq65,1VnEsFbSP1,23tBlpqlA0,2PCtTtdLnh,2ua8fbmbtc,3RZIekG1kL,4ayooKwQJL,4nzgBuqaHo,8uSPVihn5-,9FXQ0MzxxY,9G4vK4Pr8T,9ZcTTx19Qc,AH6kx10mFZ,B-iY1znsFk,B0GUEFB1P0,B0b7sKXXLh,B0nSWrUBtu,B0tgyJ2Po0,B11cuX1TAG,B1RzsBigyH,B1ruTIny0i,B2JfscCV5N,B2WPQXukAZ,B2qFhnQKUw,B2ynlZzbNu,B4GiDcgOJD,B4dT1LF9Xj,B4fKKQ85Pe,B6Ma-THlFe,B6eqLb7QMA,B6fag1CpdC,B91kokFtWg,B958QGpiqT,B9VNfxPnRQ,BDYLpz2FWe,BFmogXVc0i,BGZWDxVhkS,BJ8457i2ux,BJrF229veZ,BK6si6eky2,BL5g3DndLw,BMFDTuggMa,BR90bU5MG4,BRDyCWm4Rh,BRFWgjzA3J,BTMVlvNSCZ,BWUv70NGv2,BY5s8_6amL,BZWSujnPVj,Ba2ktX0jRv,Baw1yai06W,Baw1yai06W,Bbpjics0qT,BcI4xjDIUi,Bda8AlY7cb,Bebrrdx96l,BeyjAPjr8j,BfVH-8KTkJ,BgBh2Y6BEl,BhniQhbnzG,BiFJtb4HH1,BlgxZmvMqV,BmGoVZlibE,BmjvBb37Lf,Bn9RHtn593,BnU9ngcRYG,Bo1OxWCnhK,BpoGOwSbHg,Bstc-TPRzO,BtqmVQuPYp,Btssc99fEq,BuasSUO-Pi,Buvj0TWRuY,BuwMhGYtTu,Bv2UEnJP_M,BvHMzDgMeb,Bvisl4eo-O,BwwNxOs48t,C0C7QwUXW2,C3GpPPatnv,C4CPJnnqEn,C4M697_7aU,C4Nnqk02vy,C4cykiab5K,C5iW6rFc58,C6KPPZdNJl,C6O-03uNiN,C7DlNaogZc,C7og6I8LHS,C8O0QCedim,CAojl5TA03,CBz5gINehS,CE3jQ-N498,CEvhM-YVTe,CF7koVMPpC,CHQVHMTpy9,CHku6Ip6q6,CI0yBoQDcR,CKsIosKfgx,CKsIosKfgx,CM27hvVbjn,CM4Yt4lwBK,CNvWjuNO6k,COcAG5b3z6,COnjW8lHIX,CP479kNT9c,CPXoub9M3Q,CQjZ0YAEaF,CTyiL7pGCa,CXV-5KlNwg,CYBqZNU1gK,CYBqZNU1gK,CYJrCKuXKJ,CYiqrVI7VR,CZG0SdYI1q,CZjYONUFr5,C_3xMLUPif,C_t0TLwb9j,CaB8r7vctm,CaPJlLyR_F,CcBxp3wmqE,CcKJFSDFop,CdDez1QRWz,CeOL828-ZM,CfcUP9sw5_,CfwQD8hzEr,Ch9G1IORpm,CjgNN7N0Fq,CmhNpfx6FK,Cn3kKRj4LY,CnRFWTfMoc,Crv5PwE97N,CtuY39rKBg,CvaOq-CG5Y,Cvb9olGC7o,Cy0QTNmAAP,CytJyTE5ak,Cyvvzn3ren,CzUjBJVMqL,D-7Kv3WVZ-,D-C675477w,D-DAMCjbp2,D2DNWfRfJv,D2DNWfRfJv,D4ENB4GNy0,D5U6hmhgBm,D7RwWzHfgy,D890qTwoES,D9tyoAx76p,DABkYtTZUk,DB7EJnDM6p,DBJs7fH1IK,DBYL1YLvz0,DD40O4nTG2,DD4cXYExrO,DFBfgTBypk,DKrWW7ncva,DLFtFyNidi,DMnhshM8Rs,DNc9Rmw6ZC,DQB3v_G9gv,DSJpOicH2b,DSUmNVMXPS,DSpWxPg1K8,DT32iBZoy1,DVEDyTZBzT,DVe9tdeJ3U,DVuYxLFhwU,DX7jjmqpDz,DZQ0etO02m,D_0Ske-sOT,D_A4ReR1_n,D_XQ_JqsFQ,DbRVT79Iwf,DcWnEmROHs,Dci_902s0q,Dcqif0IyI9,DdxQwcKqJj,DgqGr9ojqc,DhEfK98Nhj,DhlTc0YBBV,DhtLQwV73x,Di5VtediBc,DiuB9SZMsI,Djv5xa-DuH,DlbXN6i4IJ,Dme8Cm-RPb,Dmh3DOABkV,DmnpZ4sZRf,DoVmvKWV58,Dqi9xEE0VO,Ds3oCZWV7l,DtaI96apcK,DxhHGyB_ga,DynheM4gSF,EYSsJxWh3I,FHThWwypXW,GC3qDoHJHR,GwqYkMYux1,HDpF7ujp6z,HWHyQpXXXk,Hw1PFKH8z9,IuJeooNANT,JaGlTj3I-9,KDUVacAYUP,KZi2ImYfJo,L6XhMWovVU,MHtsdjNQ71,PnS88aaknF,PyFqjH_azB,RfUmQ7WqNL,RwM-3aswSw,Sw3WJr23z5,TKEpov8bvg,UXEpgLE7sP,Yp_OV6CjXa,YyUK3iDpHb,ZnQ1BlAKLS,bqa0CGsYB-,c0tymxfCoY,dLY4_gjNLV,el_j_xJU_c,fgYl4BR7hc,gWzjGDkiwm,gjFnjAmSVN,haZbhPkeVY,i-c-hFf38D,i_MAdrvgqh,idm901oZUX,jC43VKBpqq,jhj7ySPcO5,opv4zGbp6d,pwScTb3Unr,shLsWH5Muv,srDBdn6KRw,uOlAvv4IVq,uiMX-IWib7,v1tTPJOAch,wG8kjCgG2y,wk933LiL0L,xKgIEA1z0z,x_mBgHyDWm,xm0uoSLmjH,yBzNcWjN22",
+      "hash": "cc50f5f30f04aadb3ae4e51c40e93671148fa7eb43044a9bcb8d0dd94c8b60fa"
+    },
+    {
+      "url": "https://emoji.redditmedia.com/qm5fqbwnugjf1_t5_2r397/Dinglehopper",
+      "hash": "5a90cc4ecd7751552c4be3ab1f8871c906af56529ab9f49d5045571278ab3a11"
+    },
+    {
+      "url": "https://emoji.redditmedia.com/5atpv9pyenjf1_t5_2qh1i/donkey_right",
+      "hash": "997282cf30b0e34897c29c1c08983d1cda0c5cf28971a0d0ef5ccf8fbb11d82b"
+    },
+    {
+      "url": "https://preview.redd.it/what-is-this-blue-stick-i-found-in-my-trash-bin-v0-f5ey2t1p5ueg1.jpg?width=640&crop=smart&auto=webp&s=41a24cbb2f0e7d4996a8c9b9bd0a9f926a76562d",
+      "hash": "00cc6f452d93f3942d6ad865954a1c4ba9cc76087c269a53b777292c9e3295b2"
+    },
+    {
+      "url": "https://googleads.g.doubleclick.net/pagead/viewthroughconversion/788729857/?random=1769114366541&cv=11&fst=1769114366541&bg=ffffff&guid=ON&async=1&en=gtag.config&gtm=45be61l2v9217137991za200zd9217137991xec&gcd=13l3l3l3l1l1&dma=0&tag_exp=103116026~103200004~104527907~104528500~104684208~104684211~105391252~115616986~115938466~115938468~116682875~116744867~117041588~117223559~117223564&u_w=1280&u_h=720&url=https%3A%2F%2Fwww.reddit.com%2F&frm=0&tiba=Reddit%20-%20The%20heart%20of%20the%20internet&hn=www.googleadservices.com&npa=0&pscdl=noapi&auid=183416950.1769114367&uaa=x86&uab=64&uafvl=Not(A%253ABrand%3B8.0.0.0%7CChromium%3B144.0.7559.59&uamb=0&uam=&uap=Linux&uapv=&uaw=0&data=event%3Dgtag.config&rfmt=3&fmt=4",
+      "hash": "77d5fe96defd6c8c1e3b0466b4827cf83dc7e5c727a10177e115d25132fa86f6"
+    },
+    {
+      "url": "https://external-preview.redd.it/K-FArxs8_jAMngPULX1hnXJQamGZ9qkZM6XDyEXs8VI.jpg?width=640&crop=smart&format=pjpg&auto=webp&s=ad7be3888a345188a07b7a6aff9e2f97c7ae6f1b",
+      "hash": "d6a13f8dbf16b80f15f8a7b0df74b48f75b49abb91b7de93a83860fb977328f7"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/Lol_40.png",
+      "hash": "2dcc549d8b00de54e0984467d7f872bb8d120e4ffb8a27d03d7575255cbd3439"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/mindblown_40.png",
+      "hash": "7b32f8959594124523e58a5e9a122941f8ffb522ee05f9b4afbd871d41cdcb69"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/this_40.png",
+      "hash": "2e19af0b19d73424ab2d600fc7cbea7bf49493ac318ec39116394421f919108e"
+    },
+    {
+      "url": "https://www.redditstatic.com/js/concat?prefix=en-US/&chunks=33gg5hOQUi,7Ltovqk_29,BHcp0r20vg,BsG5523vZs,CJ-J2gN9_c,CMTbRFHPHd,CvkW6A6RRc,DatvDOkHyw,DiQLhbgkai,DipRlphOn2,GPpVeuromF,WQorlNPMIq,dj96rGPoPA",
+      "hash": "81061074bcb6bf0cd4738839e15e38b2bbdb60cba94799fdce5424928b3085dd"
+    },
+    {
+      "url": "https://www.redditstatic.com/js/concat?prefix=en-US/&chunks=CJFRhlI-CA,Ci4R66IunC",
+      "hash": "c41e7c4a39c83a5e2a52c1b4711f3931e090420216cdab9c759d89465fdf1f1f"
+    },
+    {
+      "url": "https://www.google.com/recaptcha/enterprise.js?render=6LfirrMoAAAAAHZOipvza4kpp_VtTwLNuXVwURNQ",
+      "hash": "29bf965f177632f7dd2bf7086ce406aadab51028ff517a821f4175bc406b55e9"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/pix/ads/1.png",
+      "hash": "3eb10792d1f0c7e07e7248273540f1952d9a5a2996f4b5df70ab026cd9f05517"
+    },
+    {
+      "url": "https://preview.redd.it/lobg8f3joxeg1.jpg?width=216&crop=smart&auto=webp&s=b3165b78ddc8bbb355eaa5cacb995f32f3dd4f2c",
+      "hash": "29a065db9a0202d60f6bcbdcee6a682a5f2342ea03b1d0e9a5200823aa44576e"
+    },
+    {
+      "url": "https://external-preview.redd.it/2026-oscar-nominations-full-list-of-nominees-v0-EpCxqS5ATDdNDEP-BRAJ9-4BRwkqs1wsymhyl28dwfc.jpeg?width=320&crop=smart&auto=webp&s=4f80492d7caac57e2b1fd01b8a03f406fdc763e0",
+      "hash": "9f2ea08266a7a6fb8f40d51857a2926f89f0bc4ee3c61e751b1e8946613709e2"
+    },
+    {
+      "url": "https://external-preview.redd.it/heated-rivalry-stars-hudson-williams-and-connor-storrie-set-v0--ehkCyNlf2rfKlSSE5zwl6qIacrhFNhp9Ah7Vjks0lg.jpeg?width=320&crop=smart&auto=webp&s=0314e84535ba8a1cf1bca4e7743a672a328e3e2c",
+      "hash": "3caf96a3696fa0e188a209b7d433b25834fec57d7cf34f36e11b31167e80ff3b"
+    },
+    {
+      "url": "https://external-preview.redd.it/eu-leaders-to-reassess-u-s-ties-despite-trump-u-turn-on-v0-XmvWY7G7fRmxUpqjRXMHE1M4Uja9fiEjOQp7fpKw_RE.jpeg?width=320&crop=smart&auto=webp&s=b07660f18f57505b2ae7eb78842da727b1d392a1",
+      "hash": "547bfa906af77dd5428f9f3392b765eca7328455a2fb747073b167cdeddb30a3"
+    },
+    {
+      "url": "https://external-preview.redd.it/i-stand-by-my-decision-to-prosecute-trump-jack-smith-says-v0-QuDm0OpwFU_JrBN9-BFgUjumMRn5SgIqLk8FVGyvk2M.jpeg?width=320&crop=smart&auto=webp&s=e0c3632a15387231c9debbf0424bd2a012ed74d7",
+      "hash": "ff22a58572f99cb1de29648f03fc4f3ffeb7177e1357446d5f0f57c30015ea32"
+    },
+    {
+      "url": "https://preview.redd.it/trend-news-v0-rnrp12ugl46c1.png?width=320&crop=smart&auto=webp&s=5ea164e4402c6cf50d952839b859bb95523df340",
+      "hash": "401e4efbd80bb767b609357a296dab3b3c291ee9d0cafa24b1f62e33bafc78e9"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2cneq/styles/communityIcon_fy84mdgh75201.jpg?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=e683f14d7ba667d132ab4d5095b80d4d4e481c45",
+      "hash": "69e17bca4ac0f9c0139ef1e24b67868f802d771cbbc8aa3ce832fd1366545cd6"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh3l/styles/communityIcon_fmygcobc22z81.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=84dd8d740c6d2679fce884a9a51ac9e5f9a50f72",
+      "hash": "9ff2b80681947f326b67a2f08eb61e95c27adc8b63f2d4cd1cb200d62604976e"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh3s/styles/communityIcon_3hssuqq28v4e1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=d3f3f2d984df24e945a96bf53dbb8a30d53918ed",
+      "hash": "5dbd1a66b9cdc349a8f6375d1d3ffb7f1dcc3a424654d94b0baba7b26aa828e9"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh13/styles/communityIcon_pldiwqvsyns91.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=8273bba36ff5e6e307f967e93e4e104139b76b89",
+      "hash": "417b67faa7f68adc26cfb80048514f508e2f931bd8c0e04a1a98dd1a22d7a7a5"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2rqcm8/styles/communityIcon_c0ewy1d7nk3e1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=e531bee4b0b746786cab04c4e65ed1c8da6958c4",
+      "hash": "5ff87ee8c0bdb55ca05a68db8fca362362cc02f15499e078f0a4bfe1321e8f29"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_erahcl/styles/communityIcon_edrn4ifjt54g1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=a7ef79642a793d821ee13e5ae7f905947360fdf7",
+      "hash": "8f217de9edbec3dcb428ee2dbd296308c73969860ba09d7f5aa1fad94a4f8866"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qzb6/styles/communityIcon_v0zs2b3d7f251.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=fe2e1205f471f3819cf8563806725a55fc653755",
+      "hash": "4489f7d786d8c359077727bc6dc2dda92514506db3baca3ca51f7b835fc2c89c"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_3eb8a/styles/communityIcon_y3i1684w1sd91.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=44237f7113fd8f9ba0ed8a6f18cc37ec54320ba7",
+      "hash": "2276075de197775b07b7bf0e5a37a5993c617674e3f8fdf90a7f39de0fe84664"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2seh9/styles/communityIcon_hybmyae0zqx31.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=0fa3b27c6438e4d63671526226fa05eefe90d679",
+      "hash": "cf7fd83959196f94c3086f1721a4a9b8500c24e3ad5f1a12fe3aa4f16e7aa2ec"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2r397/styles/communityIcon_mfov4lc4k5qe1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=03391c678a072012291a4df622ef962b85dfb3a9",
+      "hash": "6c94be368f25e0501f186486c81771f0d9dea2e9db5b473f3efde4002f126a26"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2ubgg/styles/communityIcon_lkxajjefezh51.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=52482286232ece54d2c39b247f8e40045700bee6",
+      "hash": "ece96422b13f59bb9f930d7176815fea337e4ec748cb57e4cadeb030cbb2e2ac"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_3h47q/styles/communityIcon_zqvf8dnae26b1.jpg?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=b3e32fcdd9858955b97c32b202f17cd098420693",
+      "hash": "068371b4fe0c42f612481f8ac07460e03e27b10731a244ca5e55b6cf15309bd7"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_7ibap/styles/profileIcon_959m2ahnrgk11.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=48464cc97e402984f10d0c569cd72b2498ab8f39",
+      "hash": "016585be885eb891e41ecb27935a94205519d63814024eeec5da063e65f3df6d"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/ad/image/1.png",
+      "hash": "3eb10792d1f0c7e07e7248273540f1952d9a5a2996f4b5df70ab026cd9f05517"
+    },
+    {
+      "url": "https://www.redditstatic.com/js/concat?prefix=en-US/&chunks=4l24Rp4CsW,AiHUvTH6Ys,B2UHNWepbj,BEbhA2HN1A,BGOYnUQVLg,BK674aTpRq,BS-MDNDFpL,Bpk4k6i2rm,CPE0RC6ZTA,CTFSA5AN39,CZGpgdB8Vs,CbhUjWAyhY,ClDZzgFG6m,Cmb_3A6kqe,Cn2ahx6hfJ,Cr_HhiIzJv,CsppnrfpTM,D3lrbl9n8K,D5_VOWk9ho,D7PJMtxyar,DBZCy3VfkH,DCWKEv2eXN,DIhG7Mlxa5,DN1N1DPIWj,DbiGLGW1h6,DfWIZS0RtX,DfWIZS0RtX,Dirqbwhlkh,Dkz8YdRqcF,DnAJw34zDF,Ds_-f11_Al,DtUMizHjvz,DwYiNe-Fxk,Dx4x56iGkt,DxfhavIkyX,EpiJ334IBg,_W3IKFjjEy,_sb6BzPtqv,ioUDQkFWqL,j8nYRN_kJJ,pGnr--rSSg,tw2M8kPzNV",
+      "hash": "923d70d5add3911b6092a91a170915f21000512433509d43572d2326f4ac85e1"
+    },
+    {
+      "url": "https://alb.reddit.com/i.gif?za=D-1d2Y2_25wFbCsU8PARjBiJqjJqwSuBt7v9VMsuDnV6uuH8-4EPmRWutk1s3Qz_uMEItB-gvz4tMD7DLa5T2Vo_rsUu-aKfDLOzlo0_e8Nqkju2Ih51gg2I_u3p1TxRtfc7mv0b14lrDpkyVWuq-cE4S071HxrL-FhovtbL7LRObaXbuQevcLO1jzQ-XNwHnRk9AiJKr-3ZE6foNVST-KCVkIKLCzLEXDKA&zp=iPGrj1HyBOYv70fcchw-Mu4PjqZ_XW7CIE83YJ9PJk2HvBOOKpsfKG1gJiLMcG50B2Y7QstRYpidaBolArHW3I8Gk6IR18m4QlbP9mRm-XQPJ3q98J_gSt4O4bO_HQ&a=0&b=0&be=0&c=0&d=0&e=0&ea=0&eb=0&f=0&r=0&g=0&i=1769114367320&t=1769114367320&o=0&q=0&h=206&w=0&sh=720&sw=1280",
+      "hash": "ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629"
+    },
+    {
+      "url": "https://accounts.google.com/gsi/client",
+      "hash": "2a15276e034c2d9cb0ad6d12ad15b8b23d65ff4da013d3ea264cf5395ce6c4e7"
+    },
+    {
+      "url": "https://www.gstatic.com/recaptcha/releases/PoyoqOPhxBO7pBk68S4YbpHZ/recaptcha__en.js",
+      "hash": "d89a3b683ad06f027eaf33c886083c7d6f0fe88ee28e646059c4f521a166cde3"
+    },
+    {
+      "url": "https://accounts.google.com/gsi/style",
+      "hash": "d49e8f04be7ccbb69e87ae474ee50f6903b780451989e66d35ffc247a80510fe"
+    },
+    {
+      "url": "https://preview.redd.it/what-is-this-blue-stick-i-found-in-my-trash-bin-v0-2ei3pk1p5ueg1.jpg?width=1080&crop=smart&auto=webp&s=d459734c99179f69c2c4583501befeb873c948fc",
+      "hash": "bb3a6c34f6a204561f016f781c4811ac4be4dba030c14327b122408cf0cfda08"
+    },
+    {
+      "url": "https://alb.reddit.com/i.gif?za=yNKPhDN_5fgRUcPS91K6bUrmI98m-hmuy0DmvZyTm9gOx7_gFyrQ5pmiz0mUuSYLcipaUCUzYOE_Qg_LF1c4WzF3mBepBLrOQ5aXTx_hGEwaCtYKpwqxmhQ26DsOjZvaGE_WFvR2eawJCWZqwTG2Rafiebqf9ineZ8apRwzMJ7N3q7WYnV6EfQixp9IqQ-N9Wz8Gkboexgyv2XxIihkuN6iAwn7qRuYdV4kScBDylb6zQZ2JhLTA&zp=-9y27GOZ678NfrGV6-h7iGTkJSPW_VMpOBTtXYYZFDRqODYz21B7bHi3kVkOa1ApZWGvUozeob1uS5VfiIKTXCdb_RGSrwdth-fRvvk5zxzSJc_pZ1Y34MPhoeSrjg&a=0&b=0&be=0&c=0&d=0&e=0&ea=0&eb=0&f=0&r=0&g=0&i=1769114367726&t=1769114367726&o=0&q=0&h=0&w=0&sh=720&sw=1280",
+      "hash": "ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629"
+    },
+    {
+      "url": "https://alb.reddit.com/i.gif?za=lql5jhYALMPiUDBDkVG86U7VSVC8qcZ02YeOarlthbvAbYGIYIj_B0NPyfWMeJrX9SKoRMt6VSp3Ba5f0NIhIMjEFzQY9jk5mHuMlPMp7W27p1OO0C3CnwfuWtQV8kyZfWsK0Y6v4yBz75vCCar9NJSCnA7P49Dj2lfdhrweBJsTNvD4uXisFCmWjPKqo2NJpHC1RAtDj4iCwxwlgiIRZIE383K_tfdHp8tv7tOTAtr6sWZB0Xdv&zp=Kk1lVchYlxTRVpKGLDe8ptaMkLq4y72HHl3UXJX9kMy0yhlOVzK7vcPoFXuYYPDOWc2RkpLtY-xvBJA6vSP6lL_ZfY3a_FQwa4fJoqF-Ehv_4mszvxRRcCFeA1MI-w&a=0&b=0&be=0&c=0&d=0&e=0&ea=0&eb=0&f=0&r=0&g=0&i=1769114367733&t=1769114367733&o=0&q=0&h=0&w=0&sh=720&sw=1280",
+      "hash": "ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629"
+    },
+    {
+      "url": "https://preview.redd.it/what-is-this-blue-stick-i-found-in-my-trash-bin-v0-zggxum1p5ueg1.jpg?width=1080&crop=smart&auto=webp&s=2e34f15725e909a8812e86fbdef04538f28a77cc",
+      "hash": "37d95786d7679a3051876e992ade798a8f7cdcdea9e45f7337615988df7de03a"
+    },
+    {
+      "url": "https://www.gstatic.com/recaptcha/releases/PoyoqOPhxBO7pBk68S4YbpHZ/styles__ltr.css",
+      "hash": "08003ec505dd59b8ccc0207938aa40d0ee43099fbaff76d2301cfe614b997e9f"
+    },
+    {
+      "url": "https://www.gstatic.com/recaptcha/api2/logo_48.png",
+      "hash": "1b9efb22c938500971aac2b2130a475fa23684dd69e43103894968df83145b8a"
+    },
+    {
+      "url": "https://www.google.com/recaptcha/enterprise/webworker.js?hl=en&v=PoyoqOPhxBO7pBk68S4YbpHZ",
+      "hash": "f1e9611d7795cd326e7d7976787823be8c1a258d2be43c91cdb43d447c5e4ac7"
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/roboto/v48/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2",
+      "hash": "20b535fa80c8189e3b87d1803038389960203a886d502bc2ef1857affc2f38d2"
+    },
+    {
+      "url": "https://external-preview.redd.it/sounds-like-a-sore-loser-to-me-v0-YmR0aGpnam5heGVnMYb4SQTkLZAPjBt72PyO8OInoUncfNgYZGxTwcXYK-9o.png?format=pjpg&auto=webp&s=88354d44dac4a586063589ed6cbcf12a0901b8a4",
+      "hash": "21b1c7b20afa8fb77601baa9f1ab1c640b03fd8d8f95d4dd1c8c58c76f4f6598"
+    },
+    {
+      "url": "https://external-preview.redd.it/wcgw-trying-to-put-a-fire-out-by-putting-it-outside-v0-dmU3ODRhYm54d2VnMTPc_OmXJpv1j8-bsAAvRs04GXIkYjHCsVLolmcZh7Sj.png?width=640&crop=smart&format=pjpg&auto=webp&s=74fabf20ebb7d80c6d95747aebef5a3ad7a3fd37",
+      "hash": "b4094c4c0703c56e040a98f6d5c77e55aceacac9a5a1dab1f2c03af7732d457d"
+    },
+    {
+      "url": "https://external-preview.redd.it/naomi-osaka-stunned-by-frosty-handshake-from-beaten-v0-eXd2djBvYjM3d2VnMfh0CtpdrN5hC26nxr6I5jtDYzG64FS736nf3nkERldZ.png?width=640&crop=smart&format=pjpg&auto=webp&s=486992d88b4d5c4f4543ddc1765f8588c8d2e797",
+      "hash": "ce3d8e94b550e2fb23d2b88ad154b0ca6df913debec78330e2a17f02fc1eefaa"
+    },
+    {
+      "url": "https://external-preview.redd.it/fY9Ns30NyPk-2-9VlpsfSp4VtP2yrPykA26NJ1Dea6U.png?width=640&crop=smart&format=pjpg&auto=webp&s=b8b18b1e542884002e840b2af6907b41b8300b66",
+      "hash": "5637e66054ddd290ee850a143e043fcabae85c3647bda743f94f856e0fc24cee"
+    },
+    {
+      "url": "https://preview.redd.it/windows-notepad-moment-v0-dg6vaiotoweg1.gif?width=640&crop=smart&format=png8&s=054c9b1ad2f3391c64c235cb25dc2aa81056102f",
+      "hash": "d9f845907030c1bc17672cbf54b6c664162151fac56fda3294df15c18f5641a7"
+    },
+    {
+      "url": "https://emoji.redditmedia.com/rc0lfttpp4he1_t5_2gpmw9/1000022972",
+      "hash": "8a747781b4e60a49f6cd41fe6b793fe9d627a7f6e000fe7e9d2a333e6408bdfc"
+    },
+    {
+      "url": "https://emoji.redditmedia.com/wcu9x3mbdco71_t5_2qhxs/loon",
+      "hash": "efa51d3c1df5b61da3e659be0ba843e596ecb6065464bc776f88014f05afd52c"
+    },
+    {
+      "url": "https://emoji.redditmedia.com/o4d7xr2ebhid1_t5_2qh13/News",
+      "hash": "2d23827d4aaf1db049984f90b621a96404f39502c0a789ac2f1efa4cfc8e1c19"
+    },
+    {
+      "url": "https://external-preview.redd.it/jack-smith-warns-that-americans-are-taking-the-rule-of-law-v0-cWdjYW02NWVseGVnMRQNuicybRUG9y3TyEkR45-8BZDkXQ0RCE7HiWLAxdWf.png?width=640&crop=smart&format=pjpg&auto=webp&s=e4326db2f81f5497a7df9f454488d1b4ee1b1254",
+      "hash": "ed1f64bd660f54783beb5b4d17d7ba87496615bd18445e3784b5184f56ce9227"
+    },
+    {
+      "url": "https://external-preview.redd.it/man-performs-milk-offering-ritual-in-the-ganges-river-in-v0-YWF1bnIxb3Z0dWVnMdVJK1arjsEa616urxe2xci6G5_6Zb6e_-aN9aglmm-9.png?width=640&crop=smart&format=pjpg&auto=webp&s=4182fb88786a438d3431a981b5582cf194e4de04",
+      "hash": "3f62e8b4397f103b8c49425ea4395818d4c750b938f6df64f6009eea012f2f39"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/bravo_40.png",
+      "hash": "9849ca2c2b91fffcb4aaf3e7629ee11c172c9e1e0f051c6dab769479b0274f4d"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/regret_40.png",
+      "hash": "3d152116298b6f6a6565e91701cd0baf0c718f59d1742d97f75f3be729440e4b"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/Heartwarming_40.png",
+      "hash": "68e4420365e4de12ec21f6ee9c020c1a269c85b48e69f357aa0b5e5334dce51f"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/thanks_40.png",
+      "hash": "085642b7c81edefffb24bd92063ed1dccceeea69459fd96ac9755f448e894b0e"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/Popcorn_40.png",
+      "hash": "eb7dd8649e7f5f5e144e0dc6761981e9ab72d2dd0a6fe6a367a895dd66a84226"
+    },
+    {
+      "url": "https://i.redd.it/snoovatar/snoo_assets/marketing/annoyed_40.png",
+      "hash": "145074e1cbe2c2a520c8a14e5a083d4c01430647ae227fb59c389eb1899bd8a9"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/64x64.png",
+      "hash": "f60ae5a33ee8d16c71a0ff6b45e3c2524f9ccaf3cd33e6636c6493dd4ec2d953"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh1i/styles/communityIcon_p6kb2m6b185b1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=d00a2c17ae17bab59102be7f25fa7d7b6197e9f1",
+      "hash": "741f58ae74346878d83ebf4bf9a4c9a8ff4bac368e4477c5d87760eeb41d29a7"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_mvcq5/styles/communityIcon_twjztnhoy2691.jpg?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=b22144bb0c3597db4a5241f7e375b1425a4158ea",
+      "hash": "a0718ef1e7d3f845c77cfe0ecebfab115358a701cd4477a6de7df2b99e08c420"
+    },
+    {
+      "url": "https://alb.reddit.com/i.gif?za=dQA8eDeA1jG3dpL84rEbtB3vOFZt9s4fgF9xoa59Q-pKoOdfun4iyZQIyl-8U3x2YOQlPukQFCDF-c7gNXoi1t2Kf3g66d5qbBtER3pacHRWkBoyDs12a7-QMvVbpbcRo7renWzUOL_mWGyvFO_-aFZsDXtBjuJ992Wy1SBiHckYzv5Goivuc8Ym-fWPUSw1zWtXJ9wx8zrdgzrs52JLtPDFEq5FnGASkh7Q1wTZBgC8mNRps4rjxIxy8ek5dHA_wiom4FRm2m4RppvXXDzoWc0FGfO1yxLU_HL7QYDtyyGpLLLueWLwhWwpF3aARCd2eGLFZZgY4DbZE5yyFsLlCH9oIH-GorwzOp3Sr29_iBjxuDr85IPBimupTeUrde3Q41l_QNFP9RFnm1H85TKaJFotRUBbh-36rKIt24HhxDbyvxbHnfMmTNfrFicpWalclJaOt3bww6yUYgeeoGx4EOKr9EcdR9Mg0qKN7m3tqeapv0jUWryIb4j_vy5pij7qiTraF5vQSzCs8oP8WhT_-TfAYcOaZW3d1Vju20nifjKKPItnvFU8aB79XqeUxEiWQOJ9cyK78sMZKKouZv7SeoEkVgPeCJbBo8v_ymKTWBqyqDJMVGAl_PztouAJ8JYG7YhDe9qc94FtFDSvgeBdNTBX6g&zp=bR1Qh_-JiorDK5Xg-SOG6SvDlNneTXIRgvEACYQT4d5c_Mq7APtOAJGc4Rp_bwKbJ2V2nptcGT2UgxMEwm7jpCe_ZlgkCkJ_fvJnlbAcFIli4_TQWQXPVPt_aeDcfQ&a=0&b=0&be=0&c=0&d=0&e=0&ea=0&eb=0&f=0&r=0&g=0&i=1769114384754&t=1769114384754&o=0&q=0&h=724&w=620&sh=720&sw=1280&va=1&vb=0&vc=0&vd=0&ve=0&vg=0&vh=0&vi=0&vs=0&vt=0&vu=0&vv=0&vx=0&vw=0&vq=0&vr=0&vy=0&xe=0&vz=0&xa=0&xf=0&xb=0&vf=0&xc=0",
+      "hash": "ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2rc4u/styles/communityIcon_xxugabztkgac1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=bfedccb47bd040e908b93f3493418ae8fba1aae4",
+      "hash": "67dcf5a6cf7f217ada1109b42bbc365042878d94359669f9d50f4f03d4238112"
+    },
+    {
+      "url": "https://preview.redd.it/favorite-actress-you-used-to-fantasize-about-converting-to-v0-lxqxb3nlzxeg1.jpeg?width=640&crop=smart&auto=webp&s=616208a4b18f171c8dde04c03781e09bcc800942",
+      "hash": "b62b0510452872afee4e6902203c106f253e69355db2fc78396b3c420b34a76f"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2gpmw9/styles/communityIcon_hghv56s8ccq41.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=b06e00ed72a4debf0cdd76907ddced8427d93e8c",
+      "hash": "8d839de10242f798cd6b5adaa64221cb14565cee2d3e39dea66822c1b234e7f1"
+    },
+    {
+      "url": "https://alb.reddit.com/i.gif?za=dQA8eDeA1jG3dpL84rEbtB3vOFZt9s4fgF9xoa59Q-pKoOdfun4iyZQIyl-8U3x2YOQlPukQFCDF-c7gNXoi1t2Kf3g66d5qbBtER3pacHRWkBoyDs12a7-QMvVbpbcRo7renWzUOL_mWGyvFO_-aFZsDXtBjuJ992Wy1SBiHckYzv5Goivuc8Ym-fWPUSw1zWtXJ9wx8zrdgzrs52JLtPDFEq5FnGASkh7Q1wTZBgC8mNRps4rjxIxy8ek5dHA_wiom4FRm2m4RppvXXDzoWc0FGfO1yxLU_HL7QYDtyyGpLLLueWLwhWwpF3aARCd2eGLFZZgY4DbZE5yyFsLlCH9oIH-GorwzOp3Sr29_iBjxuDr85IPBimupTeUrde3Q41l_QNFP9RFnm1H85TKaJFotRUBbh-36rKIt24HhxDbyvxbHnfMmTNfrFicpWalclJaOt3bww6yUYgeeoGx4EOKr9EcdR9Mg0qKN7m3tqeapv0jUWryIb4j_vy5pij7qiTraF5vQSzCs8oP8WhT_-TfAYcOaZW3d1Vju20nifjKKPItnvFU8aB79XqeUxEiWQOJ9cyK78sMZKKouZv7SeoEkVgPeCJbBo8v_ymKTWBqyqDJMVGAl_PztouAJ8JYG7YhDe9qc94FtFDSvgeBdNTBX6g&zp=Ox_Pw13t04S9P-Ln2_WRKuVTu_yPPb7Siz_fHvrt1fvWTBHdQudnEVlj9emE6oJDI6agQ8IyGYOsv8S3VQ6TPaJvuV435MHAqTXSWAqn5aZwcEsYgMSSVsOG9tMTUEalFvhhviwHnNYsQfKH4RWKl0N3i4uqfAqDpSAAuDxM1KnNlR1gfN8NH5BuW6VWDNAV&a=2673&b=2339&be=2157&c=0&d=2673&e=2339&ea=2425&eb=2157&f=0&r=3&g=0&i=1769114384754&t=1769114387427&o=1&q=1&h=724&w=620&sh=720&sw=1280&va=1&vb=1961&vc=30033&vd=1961&ve=0&vg=1&vh=1080&vi=0&vs=2&vt=0&vu=0&vv=0&vx=0&vw=1080&vq=0&vr=0&vy=0&xe=1961&vz=1961&xa=1&xf=1961&xb=1961&vf=1961&xc=0",
+      "hash": "ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629"
+    },
+    {
+      "url": "https://preview.redd.it/he-needed-some-time-to-himself-v0-kbsasylc3xeg1.jpeg?width=640&crop=smart&auto=webp&s=76142819a34d1c38da13102ca70776d9b014c8ee",
+      "hash": "c36a6b9403f25f58156df48143359efabcff06c3fd794fe1d504a2c267428f73"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qhsa/styles/communityIcon_zp89zqe7cdlb1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=2595564dd1277a6cb988862377d92fc148eef508",
+      "hash": "af04a9fbf968f1b373295d276fa08844479bff52159801b078f2915453b0d86c"
+    },
+    {
+      "url": "https://preview.redd.it/this-is-seasoning-it-improves-the-taste-a-few-dashes-are-v0-gsi7e2ay4yeg1.jpeg?width=640&crop=smart&auto=webp&s=e899aa4ced7b3209c252b5baaf3299ccf8df1837",
+      "hash": "eaff63882a03baed73717ef85caa552021f9e7daffbc240409753929a6a8554f"
+    },
+    {
+      "url": "https://b.thumbs.redditmedia.com/lTgz7Yx_6n8VZemjf54viYVZgFhW2GlB6dlpj1ZwKbo.png",
+      "hash": "953833ed8c7fea7f1565e9a37f9e2f898559805856d86941e9d9698f567029ba"
+    },
+    {
+      "url": "https://preview.redd.it/bar-near-me-specifically-bans-tap-out-and-affliction-brands-v0-kuey8h3ssxeg1.jpeg?width=640&crop=smart&auto=webp&s=f2b73221679d3a6e235c0198222e5761c0d59585",
+      "hash": "808b081a04672534d2c800602d892f4b81898f2206124d0ce5cfbc894e9b6496"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh2b/styles/communityIcon_dxr43s2p3pof1.jpeg?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=dcccdd11b075692e693178247d0540ded995b9a4",
+      "hash": "6aa58bc7357a77fe65d666a517da1c67ad8a75f505131a54e13c03f3b6f6643c"
+    },
+    {
+      "url": "https://v.redd.it/tyfy1s4elxeg1/HLSPlaylist.m3u8?f=sd%2CsubsAll%2ChlsSpecOrder&v=1&a=1771706367%2CMjY4ZDIyYjZiNDYzZDdkYTlhYmUyN2YyYmZmNGMxMGY1ZTNiMmNjNjk0YzAyNGQwODhhNjljY2M3ZTA0ZTc4Yw%3D%3D",
+      "hash": "ae55926330c4557550933e89ea49b154859bc983a18ed297de88f117d77c8e8b"
+    },
+    {
+      "url": "https://preview.redd.it/he-needed-some-time-to-himself-v0-kbsasylc3xeg1.jpeg?auto=webp&s=55f9f03e68ed54cd5c5556865412a8ec3a9009fe",
+      "hash": "ccea5c0aa5daad457ebeb333853179243351235be309d323121fa97cdba837ad"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2t7hh/styles/communityIcon_gnio7chxo2261.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=20bff1bca489556dcd7db670b0effb5a2611fdec",
+      "hash": "1e2c71232e7c71a75e480fbc0f19540e24761d7873d1d8a8c33d4dba616319d7"
+    },
+    {
+      "url": "https://preview.redd.it/bar-near-me-specifically-bans-tap-out-and-affliction-brands-v0-kuey8h3ssxeg1.jpeg?width=320&crop=smart&auto=webp&s=01e4d62e42f4b057df11b2c92142a644a7995e47",
+      "hash": "3bae75c8dc1df8c1f379056a245b799bd91323a8c9761b28476f2550c462eb58"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2rgs7/styles/communityIcon_fr31y7fl694f1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=697686eb8dffcf4acdd8dce74523005f4c72580a",
+      "hash": "431a1ffe12addf6e6fdae4a7f926ef5392e8183ff2e128b5da3fa02160260c9b"
+    },
+    {
+      "url": "https://i.redd.it/a74h2myg6xeg1.jpeg",
+      "hash": "bcb67c391dcb1f6acfd233ae32129b53b33c06ad41f9ca3ab0c6ef371e0a98fe"
+    },
+    {
+      "url": "https://preview.redd.it/this-is-seasoning-it-improves-the-taste-a-few-dashes-are-v0-gsi7e2ay4yeg1.jpeg?width=1080&crop=smart&auto=webp&s=e724a0b3a21179cfa736a0939ca022a0b0e23e70",
+      "hash": "597e4d5938c45e0da47b01202f58f8a8cd4b496ad466439fd605f5dc9d08f7b5"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/120x120.png",
+      "hash": "1068a1d141e10407619ad1e571239c7f29df60c2afc17409b7eda68c3cb31473"
+    },
+    {
+      "url": "https://preview.redd.it/in-sinners-2025-michael-b-jordan-received-an-academy-award-v0-bbzpk73xkxeg1.jpeg?width=320&crop=smart&auto=webp&s=2f57e969f81764de0a42769d29a03f33193f1965",
+      "hash": "b090e3f6a60946ca716aa8e0beb5dfdb4ab8a01a2699c80e16091b1ee66d5ef9"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qhsa/styles/bannerBackgroundImage_3498khtiddlb1.png",
+      "hash": "69ddb80f536607bcd4f580eb03f7864b67ca03d78914a807112b6d96b8169c94"
+    },
+    {
+      "url": "https://external-preview.redd.it/i-stand-by-my-decision-to-prosecute-trump-jack-smith-says-v0-QuDm0OpwFU_JrBN9-BFgUjumMRn5SgIqLk8FVGyvk2M.jpeg?width=640&crop=smart&auto=webp&s=052541ade8985d3c1fe9de704b9118c345010c8a",
+      "hash": "e212ee27632a56bae16bc18d45241a7a98f088b86b1f9e77d2d63122b0441553"
+    },
+    {
+      "url": "https://external-preview.redd.it/2026-oscar-nominations-full-list-of-nominees-v0-EpCxqS5ATDdNDEP-BRAJ9-4BRwkqs1wsymhyl28dwfc.jpeg?width=640&crop=smart&auto=webp&s=bc3fedacdac03d47bc136b96aa0a8c0e8eb0d2ce",
+      "hash": "de16b8871605eca9bdf525969de46afc79e32648ccbc15bd644d23da2bc2dec5"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh13/styles/communityIcon_pldiwqvsyns91.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=726331e2a405806ecd8802705b4ab6bf3a6d8b76",
+      "hash": "2305e582d0276284427058c70cda30485c7254414db5a4aea84a2d2e8117817d"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh1i/styles/bannerBackgroundImage_fs33xogq946f1.png",
+      "hash": "00c48848a66f6ca8af85995012abaf8572c2dacb158dbef4fa6911b5cc1103d6"
+    },
+    {
+      "url": "https://i.redd.it/gsi7e2ay4yeg1.jpeg",
+      "hash": "9c05b2bef339743166add767234cc883f1fdd5d931cf4375064c92886dff9775"
+    },
+    {
+      "url": "https://i.redd.it/kbsasylc3xeg1.jpeg",
+      "hash": "71b7807cd10e9add0fb8a2329cf561c0236bf48b0e3f1d5d4974cd2ecda7ff77"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/180x180.png",
+      "hash": "d6b2d20ef184712f8c123d5c3a91c5800055bf77fdef98c162ad4799291e4168"
+    },
+    {
+      "url": "https://preview.redd.it/in-sinners-2025-michael-b-jordan-received-an-academy-award-v0-bbzpk73xkxeg1.jpeg?auto=webp&s=d3da544330dea1bc38234577f12655273a6cb604",
+      "hash": "37a1180984d0601b4bd33ed1a8838d0f46885dfaec94af397c5ffef8c7b44964"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2szyo/styles/communityIcon_vuzhk1k3hd1c1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=1ed106f583dfde86d7af60a45b0eb6b37d62a2e3",
+      "hash": "1b509d42239b5be9aa86611eacd225cea879e907cfd7bf9d228f03f4042b9aad"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_3mj3w/styles/communityIcon_pinvsl0ees811.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=e93406bd499a0bd2196ee0ca41d9da1c66c89e5d",
+      "hash": "ca3443f97a26b019b1bbf4ba8dd410692f0f4d8c35cf9db4618750b7dd21504d"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2ubgg/styles/communityIcon_lkxajjefezh51.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=136e3888f37faf10919f51a00a35281a38ed4a93",
+      "hash": "58c8cfdcbfbe15e6407eff60d153fe0b9dfd0ef96adafd26a02fcd9b7b02881a"
+    },
+    {
+      "url": "https://preview.redd.it/he-needed-some-time-to-himself-v0-kbsasylc3xeg1.jpeg?width=320&crop=smart&auto=webp&s=1ce66ed715bf52a693a20ec8a7321a2ce6a872af",
+      "hash": "7ae8108aeb67ea84a85b109c6efa37414a5f943e9d60803fd1b01c675699ef79"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qhxs/styles/communityIcon_cvey20vm9ese1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=ef1157ed9a46be108c1ff44d46fa5ddb8e165005",
+      "hash": "dd712ff34e6c3765f9cd33758fcd91808a24fbb5067cca6c4bdbc9ea53e820e7"
+    },
+    {
+      "url": "https://v.redd.it/dglppo7urjeg1/HLSPlaylist.m3u8?f=hd%2ChlsTrimLow%2ChlsSpecOrder2&v=1&a=1771706367%2COWJhNjJjZTQ3YjY3MDZiZTFhM2IzMmEzZjIzODUwZDY3ZThjN2EzYTk0ZjEwMmViYThlMjJiNjBmYmMwOTM5YQ%3D%3D",
+      "hash": "7197772cae06c6122cc55fa6d6629cb00d5e82a8baf6c0c1049519f68cfd7f5d"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2to41/styles/communityIcon_gznj8kdgrjra1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=99068bccb876b12f8da0422db4e32b93c04b89dc",
+      "hash": "b7edbd0a38335427ccbb7e8e1afeaecda131c3f90813cebdcc0d47eb982f0a3b"
+    },
+    {
+      "url": "https://preview.redd.it/william-kelly-dawokefarmer-and-us-veteran-was-also-arrested-v0-2eqxgg15dyeg1.jpeg?width=320&crop=smart&auto=webp&s=88c17c4154b2256e097e82b6965511bae4d0711d",
+      "hash": "c85508f8edcbe5845beb0b4528a202bf6b4d1e471a94643983b5fd026d616a8c"
+    },
+    {
+      "url": "https://i.redd.it/bbzpk73xkxeg1.jpeg",
+      "hash": "4e9954476c610a984b6e2dc437ac514b0ee8b542c852261d4e3aa38272f792d1"
+    },
+    {
+      "url": "https://preview.redd.it/bar-near-me-specifically-bans-tap-out-and-affliction-brands-v0-kuey8h3ssxeg1.jpeg?width=1080&crop=smart&auto=webp&s=e48788e8e01b47c5478f9ec30bf75bfa9437d6ad",
+      "hash": "e2030ec4e8f7894616f58846057f35d9e78a345d280daa3e4296532ec71de095"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/128x128.png",
+      "hash": "d24337222048e00459a5c2781f6ffe6b066eb36e0578e54578076a3b5a5d09a6"
+    },
+    {
+      "url": "https://external-preview.redd.it/9nRvhsfDu2g7YRymjnc_RguWeoAajpEr1QhSxyQJ4cs.png?width=140&height=78&auto=webp&s=e364417db0a09415265711767aa4ed5d4f108971",
+      "hash": "d08920809d205dfb972c49f63e78aeccdfce6a493f17e28128afe23cf919dfb7"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh3s/styles/bannerBackgroundImage_k1ukyjei82r81.png",
+      "hash": "87570adc3aa8a7371fc8ee6e6a7494de037b96a1f490b8736c849dc638c0b6bc"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_3mj3w/styles/communityIcon_pinvsl0ees811.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=743871ff5675cacafcff619652b85264a0804ee9",
+      "hash": "fe84634bae30ced00e2ec3317f439d611617a5414fbcfd2b4179ed8c799da88c"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2cneq/styles/communityIcon_fy84mdgh75201.jpg?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=8b11a3fd2e75f830f3812fd880cab51500d4e971",
+      "hash": "6d30d00404f9aea97527cb6521ca7ae0b9ea776effe300f590871588d6e3ba63"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qhxs/styles/bannerBackgroundImage_7sntxb4d8lcg1.png",
+      "hash": "ce2256559451cde5d41b05273d13ffe9e5c0e4cd8a6e4bcfda70448c25bc47db"
+    },
+    {
+      "url": "https://id.rlcdn.com/472486.gif",
+      "hash": "ef1955ae757c8b966c83248350331bd3a30f658ced11f387f8ebf05ab3368629"
+    },
+    {
+      "url": "https://preview.redd.it/favorite-actress-you-used-to-fantasize-about-converting-to-v0-lxqxb3nlzxeg1.jpeg?width=320&crop=smart&auto=webp&s=2f38cd6ed894134742a361e03ae30a708b1c5350",
+      "hash": "ebb7477acae3c295cd58f2991830b03d5d1ba3e9817f7d50c766f98887739b90"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_mvcq5/styles/bannerBackgroundImage_gjg9dsefkz591.jpg?format=pjpg&s=ab45f817c3c7613d0b223efab13391e15ea0b402",
+      "hash": "014fd5a26cb72e209e2c97ebd97171f890338f7642bd317a9373c6c18a3bba8f"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh9k/styles/communityIcon_p2i7q55xkuxf1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=bc015afc473d4fbd26d88193a60f457fbf1dc3f8",
+      "hash": "8d4756bee904338c03323b4638276911ed9885cd1e5637e6ee93ba521a41e949"
+    },
+    {
+      "url": "https://a.thumbs.redditmedia.com/wk4DdnifrZxOjoVTiBzk1jsK8RqACLAQi6TO4JMxCx0.png",
+      "hash": "c24e0376789fad9c4e8e8553881ce4d63b0af11a8008b0108ba4cee093310b1d"
+    },
+    {
+      "url": "https://preview.redd.it/texas-panic-buying-season-is-in-v0-a74h2myg6xeg1.jpeg?width=320&crop=smart&auto=webp&s=10c12b47cde1540ebce8ed9c8b79b169d63b0059",
+      "hash": "66ff4d041c07ec59a10f5b510dd3892dbd7f97dd44e7202c5773b3e93e253a71"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2gpmw9/styles/bannerBackgroundImage_oq70ney3e3k41.jpg?format=pjpg&s=430fcf1b469b91ba28b9263a6697380db5bcea1b",
+      "hash": "c1d2d40d48727d2ef5dfa5051dac076da28f760615261b6703119a7c906d722e"
+    },
+    {
+      "url": "https://v.redd.it/egths9wvtueg1/HLSPlaylist.m3u8?f=hd%2CsubsAll%2ChlsSpecOrder&v=1&a=1771706367%2CNTBmNGIwYmI5ZTA0ZTRiMjUzYmQ3MjZmMzE3YTZiYWYxNzZlOTZkZjFjZmUyNDAwMTAwZGUxZTcxZjlhMTJlMg%3D%3D",
+      "hash": "60715cfe32405b40c9464c26a35c9fd9f6c508093ef94f1c7ee8ff0c98f301ab"
+    },
+    {
+      "url": "https://external-preview.redd.it/i-stand-by-my-decision-to-prosecute-trump-jack-smith-says-v0-QuDm0OpwFU_JrBN9-BFgUjumMRn5SgIqLk8FVGyvk2M.jpeg?auto=webp&s=54fb5792f1126baffbb33b71ba05379c6bfd1d65",
+      "hash": "68ab3a46d37c16259806a09c433dda637daece3089620ba002241080aeb8b624"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_mvcq5/styles/communityIcon_twjztnhoy2691.jpg?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=8b58afa5b699f2efe436c9d339cd1e2049929c2a",
+      "hash": "d6b962499ad3265485cddc85ce75146cecd03280840831dfd4e6bad24d56449d"
+    },
+    {
+      "url": "https://preview.redd.it/texas-panic-buying-season-is-in-v0-a74h2myg6xeg1.jpeg?width=1080&crop=smart&auto=webp&s=e8fe52e4fb0115ad90defa2bcb47c923eb24d5b4",
+      "hash": "c56bfd5f2ae8a4f049cd65774472c6640c04b1a07c36e3f85ee7de8fad6d7f5e"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2gpmw9/styles/communityIcon_hghv56s8ccq41.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=8d129a0986b82a93513500bdb1e8577194aa5947",
+      "hash": "b788cc1d8fc689ab9b1ccea091157a160db44895bb0dd217e17536232f75309d"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qmg3/styles/communityIcon_mnbp3kikxabf1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=433bba7042cf349fcfb948b3133e4ad6c78c6d19",
+      "hash": "fe638591fd4893d3fce3dc786961754f4bdb0c44f5e1318281a824d15f7bffe9"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh1i/styles/communityIcon_p6kb2m6b185b1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=7d56f8a29a80d906bd1a312d2eac82c5f9ca6433",
+      "hash": "9e45e7a4d9734a5ac88213daa96348069b557abc2b6e95e4960cc51ca595f6fd"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2s580/styles/communityIcon_ivrtd93fevm91.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=73421e9701a2e707000a30638a51c5cf64064225",
+      "hash": "14aeac2aa9a2acebcc562d44f284464081e4dd13db8998d22b680ac8e055e650"
+    },
+    {
+      "url": "https://preview.redd.it/william-kelly-dawokefarmer-and-us-veteran-was-also-arrested-v0-2eqxgg15dyeg1.jpeg?width=640&crop=smart&auto=webp&s=3c8e1528a30336078b29cdabad71b1af76800476",
+      "hash": "7b33311b8a94a31d5c8db28aedec67be1aea75af44aefc729e9b446e5c468d8f"
+    },
+    {
+      "url": "https://preview.redd.it/lobg8f3joxeg1.jpg?width=320&crop=smart&auto=webp&s=5c276944ff19f7b2d68deca3dd517b313874698e",
+      "hash": "e11224d019c417c1064600c30662f7b1ddade9c18bf1d0321684e2b478eeaef0"
+    },
+    {
+      "url": "https://external-preview.redd.it/9xryVVIyxcqXV90bhhYNECMCHZIQIR-cnD4a8RyynVU.jpeg?width=140&height=73&auto=webp&s=6b340b8f4a0a167f86827e0fb7891e9cd8876661",
+      "hash": "53ea6b1f45d3483c053b4a05b4e612a3e9a7a81286a171e33dcb8793d7e7f11d"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/manifest.json",
+      "hash": "5293f04bcd9611f48b9ddcc4552e957f0eb54fa73cfa9fb8e911be9b8b015f39"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2w844/styles/communityIcon_krq4riav5m191.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=00411dfd29670ee3a56664f0e440023648cb4334",
+      "hash": "200e473b14ddc56a20a6b3e5069c4856c060e4dcae563c8dcca452f605180c76"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_3mj3w/styles/bannerBackgroundImage_uprvrjaies811.jpg?format=pjpg&s=543098c907083b82854e62c0486dcaa180ed316b",
+      "hash": "7ba8952c5362d0f86b6f2976b4c7a92ca1e34db8211f5c497ca239e49069483f"
+    },
+    {
+      "url": "https://preview.redd.it/texas-panic-buying-season-is-in-v0-a74h2myg6xeg1.jpeg?width=640&crop=smart&auto=webp&s=aeccaa7241d70860625a661e329fb861e4c48c5e",
+      "hash": "702d4b578b2c8a64428af7f9e4c26e03e9415e4986f8b2f36622d824fd184055"
+    },
+    {
+      "url": "https://external-preview.redd.it/eu-leaders-to-reassess-u-s-ties-despite-trump-u-turn-on-v0-XmvWY7G7fRmxUpqjRXMHE1M4Uja9fiEjOQp7fpKw_RE.jpeg?width=640&crop=smart&auto=webp&s=5ce941d28d183bb380c82f33f91498531842fe98",
+      "hash": "5e1dba6b49cbdaa4c138849a33b3f1b85ad73601d7e496c1519b5ae4c5b47fcb"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2rqcm8/styles/communityIcon_c0ewy1d7nk3e1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=1e2e6a16cd8ce0f5fda85b171e9b73e099c89537",
+      "hash": "2e14d306c572fa53c036eadb32f4b7df750e6bfc143edbd981ec1b79ba30a580"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_121h8r/styles/bannerBackgroundImage_ees3prsyx7qe1.jpg?format=pjpg&s=a2b920bee5ec8c774741dcaef1631313c5c42524",
+      "hash": "7106cd077f6a6ecbd4cb14233edc220aaeef9b045114c49cb49c6a6e20f67cd0"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/152x152.png",
+      "hash": "fed6a2ca123dbb71600644b0668bfc46999f51f560e684cae703a3d4e67a228d"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2rqcm8/styles/bannerBackgroundImage_e5mg92brmq6b1.jpg?format=pjpg&s=c2c8307b2bc80d5bbb92e2b83bf94e9bd0cc44e1",
+      "hash": "e4171c454575f6d7fbc50e81d44afff308a53d48b4ce805df0376889f26418c0"
+    },
+    {
+      "url": "https://i.redd.it/11eg9qv87seg1.jpeg",
+      "hash": "ce2649d13228a5ab7f45cd32d77e98419aab0d4ae085994810db1083bb4fb4a9"
+    },
+    {
+      "url": "https://preview.redd.it/why-does-it-happen-v0-11eg9qv87seg1.jpeg?width=640&crop=smart&auto=webp&s=83ceda759138d2f33111f6648712ef81d6525307",
+      "hash": "0cbd8c9b70889f28682a20070613e77502ad2df1baf773558a37555b6b9d48ae"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2x2oy/styles/bannerBackgroundImage_noc56x5mbi821.png",
+      "hash": "8755ffc64b9ab106203926fb202dc6a73b3e612423f1968f4d43d1ae20b398e1"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2ubgg/styles/bannerBackgroundImage_qhj1ts036d811.jpg?format=pjpg&s=9f3ecce6a0cf7923edaeca4a3f31389f15b8db63",
+      "hash": "527265626a7638c11cc78e7e3a678e1503168e6bf5bb4c3a763dbae6fd948248"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_c5ne2q/styles/communityIcon_s5r4km77b5hd1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=42a2094c201fffb66705dcd5793561c64a3d68de",
+      "hash": "34561f20ee9e5d638a2a1a5f7cca95d34edd00435dbad21294dfd6ec08d110c8"
+    },
+    {
+      "url": "https://v.redd.it/wv6txsd37weg1/HLSPlaylist.m3u8?f=sd%2CsubsAll%2ChlsSpecOrder&v=1&a=1771706367%2CNDBmNmE2NWMyMDVmOWFlZjFkZGZiYWE2Y2I4M2Y1ZGM1NjBmMTgxMjViMTNiNTdiMWYzMTY2ZmIyZDA3YjFiOQ%3D%3D",
+      "hash": "f90023be8806202f1e2f60dea06a833728c3fd0e1e725341bf1c2f5d5bcfc1f9"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_4lgulj/styles/profileIcon_ueah1oiivtyc1.jpeg?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=6b1862ddbe63756aa13f8e5a7712998892b351b4",
+      "hash": "e791cc565b6431257cd37d1869ad6e98ee68327e7a571e686177192001cee728"
+    },
+    {
+      "url": "https://preview.redd.it/this-is-seasoning-it-improves-the-taste-a-few-dashes-are-v0-gsi7e2ay4yeg1.jpeg?width=320&crop=smart&auto=webp&s=73ba74ae85119b1e02b61d1c87fe3481fcd5e540",
+      "hash": "aff8df31b0bf5a09e45ae12ab6a63af30566488615cd0bb6764f98121b681b91"
+    },
+    {
+      "url": "https://external-preview.redd.it/heated-rivalry-stars-hudson-williams-and-connor-storrie-set-v0--ehkCyNlf2rfKlSSE5zwl6qIacrhFNhp9Ah7Vjks0lg.jpeg?width=640&crop=smart&auto=webp&s=ddca3dee2ed1af1b666ed39f8053b83169df0245",
+      "hash": "0b543082effc0f1cc3e0b15e5bf5cc4caed85c04c44e325e16570594e988e126"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh1u/styles/communityIcon_21ykcg22rm6c1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=a7dca0206c94ec9d727842e43252c401ff722df7",
+      "hash": "cb9e1024ff80517a80c373d354d5684ff01fd34520c4fd65905db202e3da0e67"
+    },
+    {
+      "url": "https://preview.redd.it/why-does-it-happen-v0-11eg9qv87seg1.jpeg?width=320&crop=smart&auto=webp&s=40ecf3c0c41045ed58d48e89ea40ed2958c279e7",
+      "hash": "43e6b33744b955df8353d341ed4b96b62f73b9a4e458aa708242d4475cee80dc"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh9k/styles/communityIcon_p2i7q55xkuxf1.png?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=027349a8f0d3bac011b6a6886a2b8dd47936f498",
+      "hash": "226c22ef849682e26294fc40da61ff57a08244b45be85c22469118b5ec2e2c40"
+    },
+    {
+      "url": "https://preview.redd.it/dg6vaiotoweg1.gif?width=800&format=mp4&s=c95c3ffe0337eb10830479f4ea6de3a59ba3f06a",
+      "hash": "641f761fd63c1985717af003fe9ffde4ab99e7b524f7241fa5519855e0bb7001"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_c5ne2q/styles/communityIcon_s5r4km77b5hd1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=6bcdf76a018227a66ceea987fb5d6e704efb108a",
+      "hash": "16a25f8a0a1253822b2d11422901ea8b9bf321286b96629e04b7a0863a0f94a6"
+    },
+    {
+      "url": "https://preview.redd.it/trend-news-v0-rnrp12ugl46c1.png?width=640&crop=smart&auto=webp&s=17002efd6c6b5e048de0e40c75d117d6bed07d31",
+      "hash": "a7fa11d620ad876c8398f64cbc44e946bee714766624514c7528091d553fd70e"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2rc4u/styles/communityIcon_xxugabztkgac1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=7e4ad85202e3b1cc47247fe7dd1a5b4c426f82f4",
+      "hash": "4c6f2ba6b1f4af072a8c1188a2ac0f73438983c8158cb2b0170f6691e7bc06d2"
+    },
+    {
+      "url": "https://b.thumbs.redditmedia.com/B7IpR8P1mEsQIjdizK5x79s5aGfJUtKk3u2ksGZ9n2Q.png",
+      "hash": "07b22947c3f5984b10223762ccae71efdb396867c952d2a4deeda4b0667d9f64"
+    },
+    {
+      "url": "https://external-preview.redd.it/bkc7FV2RJ-AmAPfAHVrjT3MEhRr4e2f7cFX8ckpOdtM.jpeg?width=140&height=73&auto=webp&s=d62d8e3f6563a5673661a24a7c2a92635cb73813",
+      "hash": "633805344b24ce7a18ba534b9129925eb73bbce6ae8dbf9c312c31e25cabae17"
+    },
+    {
+      "url": "https://external-preview.redd.it/VoPbTp9hg1eg1ODtqqUs_op9pedkzkI7TdSSX3JQ_8c.jpeg?width=140&height=93&auto=webp&s=4c3d517c908caff41b95a689ea60f1404df913d4",
+      "hash": "cc5b1826ceb5f2be03cf780896bef102378653cbe047ea61718885cb101ad613"
+    },
+    {
+      "url": "https://preview.redd.it/why-does-it-happen-v0-11eg9qv87seg1.jpeg?width=1080&crop=smart&auto=webp&s=9f8d964c5a5cc1ba439c01cf907d49ca4298e133",
+      "hash": "ab8610f55333dea48897211e1c18ab68defcfd33e1d57f3c96321e30e93307af"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_121h8r/styles/communityIcon_16sx91he4iq71.jpg?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=97d1d3957da60617e44ff6567201fccbc11cc859",
+      "hash": "725782622489dc6e4271cfdc559a7e7c814f9a1a17fed6de052659586220d752"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2w7mz/styles/communityIcon_jmyuhs81jl211.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=9bc48fbfc2daf767b8002327cd10c1ef306b026f",
+      "hash": "e3565d9f343c60a381d6d012bb73e33a464528d53ce0f7bf15d09d46e91061ca"
+    },
+    {
+      "url": "https://v.redd.it/hmxpyn9nxweg1/HLSPlaylist.m3u8?f=sd%2CsubsAll%2ChlsSpecOrder&v=1&a=1771706367%2CMGJlMGVmODM4M2Y4NWI5YmU5MzUxMzc1NzFmOGI4YzdlMDBhZGQwMjFjZjEzMTNjNDc3MjBhNDM0YzBmMjY2MQ%3D%3D",
+      "hash": "6b93971e7e73dd730eae4467e5a8ec64628cd2da11f26a656618dfa552c8e710"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qolb/styles/communityIcon_h3zcensgnqag1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=d4c4f26beb0d812cc12b79707fd7a490ffa1a37a",
+      "hash": "1f3c38282861257b026722a1234f7fd7071ac1533b2c0700a26f0ca665219ff4"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_121h8r/styles/communityIcon_16sx91he4iq71.jpg?width=48&height=48&frame=1&auto=webp&crop=48%3A48%2Csmart&s=0de541ed6eb6d5d359fb8093e2fd88e86c65aaa7",
+      "hash": "f01730fe0001c79ae0d6d227452d6881922ef0461b6a31a2be752a3a94bd933d"
+    },
+    {
+      "url": "https://www.reddit.com/",
+      "hash": "1bcbfb90c8c535498ec8bbdcc88cebe12383052eaa252bdcf55927b95f32a6ff"
+    },
+    {
+      "url": "https://preview.redd.it/in-sinners-2025-michael-b-jordan-received-an-academy-award-v0-bbzpk73xkxeg1.jpeg?width=640&crop=smart&auto=webp&s=c736dec41b181e6be133423773f16db83b0fdf48",
+      "hash": "d92f89c42ce696849ebfcabc0e6b64dcb26b77bc3f5fd02a8a5ce3dbdfa4c1c2"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2sljg/styles/communityIcon_aumsxg2qng5d1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=368a8ed479059d8475a1b3706841e5a36b329af1",
+      "hash": "ee360b2fddaea51374ecf656808ab629b005cca7f9a631c8cae359b02e476a23"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qhxs/styles/communityIcon_cvey20vm9ese1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=0b1e6fa56acdd2092f80a20a47ffe2d9b2a1fe3a",
+      "hash": "da06e4fa01c34a6e244cc1b10b8d371707a11be9a84a22ffca28ba649d003b65"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh13/styles/bannerBackgroundImage_5q0f5lsk6pu01.png",
+      "hash": "97951e94024ae9aa643bdd9fe5d16e6dd2fde5d77a9c768e36d02712a69d3807"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh9k/styles/bannerBackgroundImage_k20yav4xkuxf1.png",
+      "hash": "4b0d60d5ba06a7396ddcb6ae552b49eef61ab9a3bb28a0f776e4e69f7ec1b88d"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2to41/styles/communityIcon_gznj8kdgrjra1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=429dfafe672aab6d2887fdb7a50f3c942ccd46a6",
+      "hash": "e9f679a72102a1df741289c19b0460e7ff6df1ea1d7827a6febe24619faa0dfa"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2cneq/styles/bannerBackgroundImage_4vvj1k5ldn671.png",
+      "hash": "90391c02154153c16a60fbc560b9222d53289bce86ee3014f894467811f96c66"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qh3s/styles/communityIcon_3hssuqq28v4e1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=be0fb41af59dc7546c3fdea6611e2514a3d52c98",
+      "hash": "6bfb59f1d561ce967b58ba403184ca08ad6d0172e37259322e2a6648d986169e"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2qhsa/styles/communityIcon_zp89zqe7cdlb1.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=dde1de6c9b8a53de5595cd92d46c5fcc1f087755",
+      "hash": "198596b504f873406e23d3cdcc4f02be2f0ab424355b75c9427270d139a0c69a"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/192x192.png",
+      "hash": "925fe993dba774b69b734410aad20f58a2c95eccaf7f0662abcc2e61530e105c"
+    },
+    {
+      "url": "https://v.redd.it/c64yboknaxeg1/HLSPlaylist.m3u8?f=sd%2CsubsAll%2ChlsSpecOrder&v=1&a=1771706367%2CMjkxZjBjODYyMDliM2MzMTcyNWZhNDM5NjgxZGU1ZjMwN2NmYmNlZjExYTYyNjU0NjFmNzhhNzBjYTg4OTY0ZA%3D%3D",
+      "hash": "39a36a7fed24d5344a988c9941ab04304c7f1d97f6ea3651a5eeb7c1ff088b0d"
+    },
+    {
+      "url": "https://preview.redd.it/trend-news-v0-rnrp12ugl46c1.png?width=1080&crop=smart&auto=webp&s=200e12ae5b4cc824efaa74f23dd5e1d347c91647",
+      "hash": "d6eb15d7b158b6b75192505c6ba15c1a018d2fe22d52db1d090dc87340f57ae4"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2w844/styles/bannerBackgroundImage_k7ndz0eykl191.jpg?format=pjpg&s=6f17ec3b8cb0b760764cb94ead9aeedac077ab88",
+      "hash": "47d00c16fe33076830e8ab329246e26e432cea7fddbd4c253bd792b81ae389d4"
+    },
+    {
+      "url": "https://preview.redd.it/what-are-all-these-posts-about-v0-yiu94w39ixeg1.jpg?width=1024&format=pjpg&auto=webp&s=8041bcb8348dd42f602c8a8ce195f5abe35f29f0",
+      "hash": "177808ceae9c982f2887ec32031864924ed9080f3c82265876cbc20d2193fe58"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2rc4u/styles/bannerBackgroundImage_977yy3nhdgac1.png",
+      "hash": "a5ba30d7d0906ab63924b41123b34fd1eafc143340b550200a6c3fa1b9a78a5c"
+    },
+    {
+      "url": "https://www.reddit.com/discover.rss",
+      "hash": "5c4a9bfcabce6b836ff9cd4ec5d28b4997a63be36d155a52e418609f347586b5"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_c5ne2q/styles/bannerBackgroundImage_33psi5pfniag1.png",
+      "hash": "459433918c1c9f0673438a74c608f3cd50b3a5e61a40761c08a6cc8472e8cf2f"
+    },
+    {
+      "url": "https://i.redd.it/kuey8h3ssxeg1.jpeg",
+      "hash": "5d873d505d9e0dd4c71f3d29bb2735cad80111451e5cf7e4b45e762f39924479"
+    },
+    {
+      "url": "https://www.redditstatic.com/shreddit/assets/favicon/76x76.png",
+      "hash": "0ab560c4917f784171c8c3657c81decf65213da17185c4cc11238476929d6d51"
+    },
+    {
+      "url": "https://i.redd.it/2eqxgg15dyeg1.jpeg",
+      "hash": "e7a464fbf4ad0284ce892c234b61da337746f7c13ac72c1cfabb430fd07e99d5"
+    },
+    {
+      "url": "https://external-preview.redd.it/2026-oscar-nominations-full-list-of-nominees-v0-EpCxqS5ATDdNDEP-BRAJ9-4BRwkqs1wsymhyl28dwfc.jpeg?auto=webp&s=8c872f3f5e75fee3c277291a50586f22c3a9e554",
+      "hash": "a5a701902ddb306b8a869c8447527c13c8b1a71d681736ddbcecbca88b6ae908"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2to41/styles/bannerBackgroundImage_be0j6czrjnf21.png",
+      "hash": "35c536faaa64028dd7fee0298b71cf44d58d8f443a389695c67b201f990ed9b6"
+    },
+    {
+      "url": "https://external-preview.redd.it/heated-rivalry-stars-hudson-williams-and-connor-storrie-set-v0--ehkCyNlf2rfKlSSE5zwl6qIacrhFNhp9Ah7Vjks0lg.jpeg?auto=webp&s=853458aaba439d8c79d8e8c6c50a03c889ed9c28",
+      "hash": "ad7fd3dbd96bf576da751174be7a04c68a68212bc6b79fc4b200c3ffca779cd8"
+    },
+    {
+      "url": "https://i.redd.it/lxqxb3nlzxeg1.jpeg",
+      "hash": "8d88fea6ae39540b9ede7318153ee5669d6cb2aecda82aa249a79d704bab4293"
+    },
+    {
+      "url": "https://preview.redd.it/william-kelly-dawokefarmer-and-us-veteran-was-also-arrested-v0-2eqxgg15dyeg1.jpeg?width=1080&crop=smart&auto=webp&s=4375b9e01912e4050d27b33c19cc25c5f0071b5d",
+      "hash": "f949daf1a1bd824297b50f7597b25bd781ab621747b747b010a57923ecc975de"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2u5kl/styles/communityIcon_mowu46ri4ur91.jpg?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=7f3423e1fec10ea89f0297a80ed176e0fd43f52b",
+      "hash": "4e50ae3cf180f253eca0c17e4b874679a1b3056b4c687fcda3959ae397d7c7e3"
+    },
+    {
+      "url": "https://preview.redd.it/what-are-all-these-posts-about-v0-yiu94w39ixeg1.jpg?width=640&crop=smart&auto=webp&s=a9ed8fa3ad878d8ae136f3562b7b8a1501407172",
+      "hash": "797a2e904213ddd426b8096f0e7ebee009b0db3a84e1b82e63abff17ff495666"
+    },
+    {
+      "url": "https://styles.redditmedia.com/t5_2w844/styles/communityIcon_krq4riav5m191.png?width=96&height=96&frame=1&auto=webp&crop=96%3A96%2Csmart&s=b7159fcb1eb5ca46592963e5547b1702845664ad",
+      "hash": "c3df6f5d86ceba8edb8031d2940ea37c5322b982fffc0af5374c994b43f21266"
+    },
+    {
+      "url": "https://preview.redd.it/what-are-all-these-posts-about-v0-yiu94w39ixeg1.jpg?width=320&crop=smart&auto=webp&s=f96f6ad077da8d9ec77463205fd0c0cf9146b8d4",
+      "hash": "9a784768b5d1e0daa6a371e9fd4d33a47cc57cbd60d852495afd7e720ea8946c"
+    },
+    {
+      "url": "https://preview.redd.it/favorite-actress-you-used-to-fantasize-about-converting-to-v0-lxqxb3nlzxeg1.jpeg?auto=webp&s=2678fe47c731919ac618dae48e2c62808b868ab5",
+      "hash": "491c3b38d97d848c4b030420bdc2ad6d44215c0a2431467b9753780fed223f4a"
+    },
+    {
+      "url": "https://external-preview.redd.it/eu-leaders-to-reassess-u-s-ties-despite-trump-u-turn-on-v0-XmvWY7G7fRmxUpqjRXMHE1M4Uja9fiEjOQp7fpKw_RE.jpeg?width=1080&crop=smart&auto=webp&s=4f3260b4892e8ec70a383af20bf172475a312d8c",
+      "hash": "541bb56d4fea52f6f3e6ce254aeb186c336b69ce629d293d07f56d4ead4563ee"
+    }
+  ],
+  "inline": [
+    {
+      "type": "inline-style",
+      "hash": "333230e491d5cdb5328bb86a6bddd456db6ad55f6fbf4499901eefb86db98b92",
+      "selector": "style:nth-of-type(1)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "c213021cfb37f2b15af90fa49f63679faed4a37b64ca9fabf7fef7e74140e6d1",
+      "selector": "style:nth-of-type(2)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "2b88a7db2c942d650dc63844939e125d793791ffb102714a1dba88d394d3f06f",
+      "selector": "style:nth-of-type(3)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "b2420c7840fcf63733b53f0c43c582c49f88e6df159f244bd212458a21f1767f",
+      "selector": "style:nth-of-type(4)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "abf053eff47a570c79bd97e11f267f9c4a4027069799bdc084b94817dbfe7a08",
+      "selector": "style:nth-of-type(5)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "84f51c29df76bbc93b6ded1303756dcf77b4d0c77167d85ae1e8af9c7c824a75",
+      "selector": "style:nth-of-type(6)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "4d81d179d8b486742ee09670eceb3125bc2797aa8875dab9b50a0802a8f7119c",
+      "selector": "style:nth-of-type(7)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "4d81d179d8b486742ee09670eceb3125bc2797aa8875dab9b50a0802a8f7119c",
+      "selector": "style:nth-of-type(8)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "4d81d179d8b486742ee09670eceb3125bc2797aa8875dab9b50a0802a8f7119c",
+      "selector": "style:nth-of-type(9)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "4d81d179d8b486742ee09670eceb3125bc2797aa8875dab9b50a0802a8f7119c",
+      "selector": "style:nth-of-type(10)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "4d81d179d8b486742ee09670eceb3125bc2797aa8875dab9b50a0802a8f7119c",
+      "selector": "style:nth-of-type(11)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "4d81d179d8b486742ee09670eceb3125bc2797aa8875dab9b50a0802a8f7119c",
+      "selector": "style:nth-of-type(12)"
+    },
+    {
+      "type": "inline-style",
+      "hash": "4d81d179d8b486742ee09670eceb3125bc2797aa8875dab9b50a0802a8f7119c",
+      "selector": "style:nth-of-type(13)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "2c1c5aa49ca65c9d83fe79f877731b06ed7b6e489c0d8e98d660f8579bce9e9e",
+      "selector": "script:not([src]):nth-of-type(1)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "458b499a09dda8dfeb63879ba2b999c809e00adde8af551df2cf6d515ac8a7e5",
+      "selector": "script:not([src]):nth-of-type(2)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "6fd0c6e7ff3832c16aa13764c2b1b9357d76eebc6cc2c428be34371648467b16",
+      "selector": "script:not([src]):nth-of-type(3)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "191bbab83c6878194e8d1fb9711befd74df41ec1e0dd2694da1b26cf78483a2a",
+      "selector": "script:not([src]):nth-of-type(4)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "c159d993722c005fc7a35020c20e26b16f0a53e868a7a085fcf08e5c33ef8020",
+      "selector": "script:not([src]):nth-of-type(5)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "3131d6dda33b0e1a3fc2daf252fa09273eddbe2eefd5bb3a86b46f38c2d8ff58",
+      "selector": "script:not([src]):nth-of-type(6)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "08bf2fb74355c9c9e8d5864f6c7618bf4934f4a4a031dce3b8c2b074c4883357",
+      "selector": "script:not([src]):nth-of-type(7)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "646bfca195fe46c9ff7be14fedc8f3e48b0f01d94e89a630ecd769f397d4c1d8",
+      "selector": "script:not([src]):nth-of-type(8)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "e9fd776132dcac40e5e44e017749d8ff2474bb3753bdd1ac47a78c078fbd20b3",
+      "selector": "script:not([src]):nth-of-type(9)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "e6100f20203505cd9d9c00b4129fb25d7d0d7058ac157428eacd9b97d3c0ccd5",
+      "selector": "script:not([src]):nth-of-type(10)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "96b9d857589fba0e024ddfe0363c90dd1f70211db763379fca4215b6975836a9",
+      "selector": "script:not([src]):nth-of-type(11)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "b57f9fbddcc92b79c1b07f3873cef3b6b83d382aea3fc3f34574ea61ee4901d8",
+      "selector": "script:not([src]):nth-of-type(14)"
+    },
+    {
+      "type": "inline-script",
+      "hash": "daea02e65c793c0a41ad48d7bd50a96b954cb4c2f61940a61d401818c253a2d4",
+      "selector": "script:not([src]):nth-of-type(15)"
+    }
+  ]
+}

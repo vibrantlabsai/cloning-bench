@@ -1,0 +1,53 @@
+# Source: google-gemini/gemini-cli packages/core/src/policy/policies/write.toml
+
+[[rule]]
+toolName = "replace"
+decision = "ask_user"
+priority = 10
+
+[[rule]]
+toolName = "replace"
+decision = "allow"
+priority = 15
+modes = ["autoEdit"]
+
+[rule.safety_checker]
+type = "in-process"
+name = "allowed-path"
+required_context = ["environment"]
+
+[[rule]]
+toolName = "save_memory"
+decision = "ask_user"
+priority = 10
+
+[[rule]]
+toolName = "run_shell_command"
+decision = "ask_user"
+priority = 10
+
+[[rule]]
+toolName = "write_file"
+decision = "ask_user"
+priority = 10
+
+[[rule]]
+toolName = "activate_skill"
+decision = "ask_user"
+priority = 10
+
+[[rule]]
+toolName = "write_file"
+decision = "allow"
+priority = 15
+modes = ["autoEdit"]
+
+[rule.safety_checker]
+type = "in-process"
+name = "allowed-path"
+required_context = ["environment"]
+
+[[rule]]
+toolName = "web_fetch"
+decision = "ask_user"
+priority = 10

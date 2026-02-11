@@ -58,7 +58,7 @@ def cli(
     try:
         if no_dynamic_detection:
             # Use original diff without LLM processing
-            compute_visual_diff(
+            ssim_score = compute_visual_diff(
                 recording_screenshot,
                 subject_screenshot,
                 diff_output,
@@ -68,6 +68,7 @@ def cli(
                 "recording_path": str(recording_screenshot),
                 "subject_path": str(subject_screenshot),
                 "diff_path": str(diff_output),
+                "ssim_score": ssim_score,
             }
         else:
             # Use two-stage dynamic detection

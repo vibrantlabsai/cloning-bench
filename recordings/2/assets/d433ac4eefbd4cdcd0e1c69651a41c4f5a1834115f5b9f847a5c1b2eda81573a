@@ -1,0 +1,1 @@
+#blocking-modal-contents::part(panel){max-width:min(90dvw,656px)}#nsfw-qr-dialog-contents::part(base){left:unset;top:unset;right:74px;bottom:60px;box-sizing:content-box}#nsfw-qr-dialog-contents::part(panel){padding:16px;min-width:300px;max-width:500px;border-radius:var(--radius-lg);box-shadow:none;overflow:hidden}

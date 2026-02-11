@@ -1,0 +1,43 @@
+{
+  "url": "https://reddit.com",
+  "recorded_at": "2026-01-22T20:39:24.597980+00:00",
+  "duration_seconds": 92.72,
+  "markers": [
+    {
+      "index": 0,
+      "timestamp_seconds": 16.946402367997507
+    },
+    {
+      "index": 1,
+      "timestamp_seconds": 21.91152102399792
+    },
+    {
+      "index": 2,
+      "timestamp_seconds": 24.527027509997424
+    },
+    {
+      "index": 3,
+      "timestamp_seconds": 27.346021124998515
+    },
+    {
+      "index": 4,
+      "timestamp_seconds": 33.437702672999876
+    },
+    {
+      "index": 5,
+      "timestamp_seconds": 40.029226298996946
+    },
+    {
+      "index": 6,
+      "timestamp_seconds": 47.384273812000174
+    },
+    {
+      "index": 7,
+      "timestamp_seconds": 51.56304350099526
+    },
+    {
+      "index": 8,
+      "timestamp_seconds": 62.543257815996185
+    }
+  ]
+}

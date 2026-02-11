@@ -1,0 +1,228 @@
+{
+  "version": 1,
+  "metadata": {
+    "source_recording": "2",
+    "generated_at": "2026-01-23T23:45:00.490289+00:00",
+    "source_url": "https://reddit.com",
+    "title": "Reddit Post Navigation and Comment Interaction",
+    "description": "A test scenario verifying the loading of the Reddit homepage, navigation to a specific post, scrolling through comments with media content, expanding nested reply threads, viewing a single comment thread, and returning to the main post."
+  },
+  "steps": [
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 0.0,
+        "end_secs": 5.248
+      },
+      "description": "Navigate to https://reddit.com and wait for the homepage to load."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 5.248
+      },
+      "description": "Verify the Reddit homepage is loaded and the post 'Tens of thousands of people...' is visible.",
+      "screenshot": "screenshots/0/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 5.248,
+        "end_secs": 12.018
+      },
+      "description": "Click on the post titled 'Tens of thousands of people have taken the streets of Minneapolis...'."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 12.018
+      },
+      "description": "Verify the post detail page has loaded with the main image visible.",
+      "screenshot": "screenshots/1/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 12.018,
+        "end_secs": 19.646
+      },
+      "description": "Scroll down to the comments section until the comment with the 'IMAGINE HATING IMMIGRANTS' image is visible."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 19.646
+      },
+      "description": "Verify the comment containing the 'IMAGINE HATING IMMIGRANTS' image is displayed.",
+      "screenshot": "screenshots/2/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 19.646,
+        "end_secs": 23.262
+      },
+      "description": "Scroll down to the comment containing the 'BITCHES' text image."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 23.262
+      },
+      "description": "Verify the comment with the 'BITCHES' image is visible.",
+      "screenshot": "screenshots/3/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 23.262,
+        "end_secs": 26.266
+      },
+      "description": "Scroll down further to find the comment with the skeleton meme image."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 26.266
+      },
+      "description": "Verify the comment with the skeleton meme image is visible.",
+      "screenshot": "screenshots/4/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 26.266,
+        "end_secs": 30.162
+      },
+      "description": "Scroll down to the comment thread starting with 'We stand with Minnesota's heroes!!'."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 30.162
+      },
+      "description": "Verify the comment 'We stand with Minnesota's heroes!!' is visible.",
+      "screenshot": "screenshots/5/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 30.162,
+        "end_secs": 33.511
+      },
+      "description": "Scroll down to the comment with the 'What Trump Derangement Syndrome really looks like' image."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 33.511
+      },
+      "description": "Verify the comment with the Trump meme image is visible.",
+      "screenshot": "screenshots/6/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 33.511,
+        "end_secs": 36.818
+      },
+      "description": "Scroll down to the comment thread by user 'JimsVanLife' and 'Darth-Yoda-1066'."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 36.818
+      },
+      "description": "Verify the 'JimsVanLife' and 'Darth-Yoda-1066' comment thread is visible.",
+      "screenshot": "screenshots/7/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 36.818,
+        "end_secs": 43.809
+      },
+      "description": "Scroll down to the comment by 'Frequent_Prize'."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 43.809
+      },
+      "description": "Verify the comment by 'Frequent_Prize' regarding conservatives is visible.",
+      "screenshot": "screenshots/8/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 43.809,
+        "end_secs": 47.748
+      },
+      "description": "Scroll back up to the 'Darth-Yoda-1066' comment to prepare for expanding replies."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 47.748
+      },
+      "description": "Verify the 'Darth-Yoda-1066' comment and the '15 more replies' (or similar) button are visible.",
+      "screenshot": "screenshots/9/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 47.748,
+        "end_secs": 52.824
+      },
+      "description": "Click the expansion button (e.g., '15 more replies' or plus icon) under 'Darth-Yoda-1066' to view nested comments."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 52.824
+      },
+      "description": "Verify the nested replies, including comments by 'LamuCalifornia' and 'Underwater_Grilling', are now visible.",
+      "screenshot": "screenshots/10/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 52.824,
+        "end_secs": 56.003
+      },
+      "description": "Click on the timestamp or link for the 'Underwater_Grilling' comment to view the single comment thread."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 56.003
+      },
+      "description": "Verify the view has changed to 'Single comment thread' focusing on 'Underwater_Grilling'.",
+      "screenshot": "screenshots/11/screenshot.png"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "start_secs": 56.003,
+        "end_secs": 60.274
+      },
+      "description": "Click 'See full discussion' or navigate back to the main post page."
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 60.274
+      },
+      "description": "Verify the browser has returned to the main post page.",
+      "screenshot": "screenshots/12/screenshot.png"
+    },
+    {
+      "type": "assert",
+      "reference": {
+        "start_secs": 63.146
+      },
+      "description": "Final verification that the main post page content is fully visible.",
+      "screenshot": "screenshots/13/screenshot.png"
+    }
+  ]
+}

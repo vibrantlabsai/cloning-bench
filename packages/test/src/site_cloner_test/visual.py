@@ -155,6 +155,7 @@ class DiffResult:
 
     diff_path: Path
     has_flagged_differences: bool
+    ssim_score: float = 0.0
     dynamic_regions: list[DynamicRegion] = field(default_factory=list)
     verifications: list[RegionVerification] = field(default_factory=list)
     ignored_regions: list[DynamicRegion] = field(default_factory=list)
@@ -164,6 +165,7 @@ class DiffResult:
         """Convert to dictionary for JSON serialization."""
         return {
             "diff_path": str(self.diff_path),
+            "ssim_score": self.ssim_score,
             "has_flagged_differences": self.has_flagged_differences,
             "dynamic_regions": [r.to_dict() for r in self.dynamic_regions],
             "verifications": [
@@ -231,7 +233,7 @@ def compute_visual_diff_with_dynamic_detection(
     recording_gray = cv2.cvtColor(recording_img, cv2.COLOR_BGR2GRAY)
     subject_gray = cv2.cvtColor(subject_img, cv2.COLOR_BGR2GRAY)
 
-    _, diff_map = structural_similarity(
+    ssim_score, diff_map = structural_similarity(
         recording_gray,
         subject_gray,
         full=True,
@@ -329,6 +331,7 @@ def compute_visual_diff_with_dynamic_detection(
     return DiffResult(
         diff_path=diff_path,
         has_flagged_differences=bool(has_flagged),
+        ssim_score=float(ssim_score),
         dynamic_regions=dynamic_regions,
         verifications=verifications,
         ignored_regions=ignored_regions,

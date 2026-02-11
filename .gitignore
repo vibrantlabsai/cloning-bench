@@ -35,3 +35,10 @@ dist/
 .coverage
 htmlcov/
 node_modules/
+
+# Trial runs
+trial-run*/
+verify-run/
+
+recordings/
+.claude-home/
