@@ -1,0 +1,21 @@
+[project]
+name = "site-cloner-test"
+version = "0.1.0"
+description = "Test CLI for site cloner - executes screenplays using Claude Agent SDK"
+requires-python = ">=3.12"
+dependencies = [
+  "click>=8.1",
+  "pydantic>=2.0",
+  "claude-agent-sdk>=0.1",
+  "scikit-image>=0.24",
+  "opencv-python-headless>=4.10",
+  "google-genai>=1.0",
+]
+
+[project.scripts]
+site-test = "site_cloner_test.main:cli"
+site-test-diff = "site_cloner_test.diff_cli:cli"
+
+[build-system]
+requires = ["uv_build>=0.7.19,<0.8"]
+build-backend = "uv_build"

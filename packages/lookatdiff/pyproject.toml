@@ -1,0 +1,16 @@
+[project]
+name = "site-cloner-lookatdiff"
+version = "0.1.0"
+description = "Analyze UI differences and provide feedback using Gemini"
+requires-python = ">=3.12"
+dependencies = [
+  "click>=8.1",
+  "google-genai>=1.0",
+]
+
+[project.scripts]
+lookatdiff = "site_cloner_lookatdiff.main:cli"
+
+[build-system]
+requires = ["uv_build>=0.7.19,<0.8"]
+build-backend = "uv_build"

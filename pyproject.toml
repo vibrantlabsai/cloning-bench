@@ -1,0 +1,20 @@
+[project]
+name = "cloning-bench"
+version = "0.1.0"
+description = "Benchmark for evaluating website cloning agents"
+requires-python = ">=3.12"
+dependencies = [
+  "site-cloner-test",
+  "site-cloner-lookatdiff",
+]
+
+[tool.uv.sources]
+site-cloner-test = { workspace = true }
+site-cloner-lookatdiff = { workspace = true }
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[build-system]
+requires = ["uv_build>=0.7.19,<0.8"]
+build-backend = "uv_build"
