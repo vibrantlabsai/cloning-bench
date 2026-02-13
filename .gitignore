@@ -42,3 +42,6 @@ verify-run/
 
 recordings/
 .claude-home/
+
+# Screenshot archive
+screenshot-archive/

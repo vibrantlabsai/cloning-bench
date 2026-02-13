@@ -13,6 +13,7 @@ import click
 
 from .agent import execute_screenplay
 from .report import (
+    archive_screenshots,
     copy_source_materials,
     create_report_folder,
     generate_execution_log,
@@ -217,6 +218,8 @@ FAILURE_REASON: Agent execution error: {e}
     )
 
     write_reports(report_path, execution_log, summary)
+
+    archive_screenshots(report_path, source_url, started_at)
 
     return report_path
 

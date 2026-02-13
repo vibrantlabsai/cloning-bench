@@ -136,6 +136,10 @@
             echo "{\"$WORKSPACE_ROOT/clone\": \"TRUST_FOLDER\"}" > "$GEMINI_CLI_HOME/.gemini/trustedFolders.json"
           fi
 
+          # Screenshot archive for timelapse tracking (at workspace root)
+          export SITE_TEST_ARCHIVE_DIR="$WORKSPACE_ROOT/screenshot-archive"
+          export SITE_TEST_ARCHIVE_PREFIX="gemini-3.1-pro-preview"
+
           # Clone output directory — agent builds here
           mkdir -p clone
           ln -sfn ../recordings clone/recordings

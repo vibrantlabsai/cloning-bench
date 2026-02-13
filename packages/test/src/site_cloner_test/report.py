@@ -1,6 +1,7 @@
 """Report generation for test execution results."""
 
 import json
+import os
 import re
 import shutil
 from datetime import datetime, timezone
@@ -250,3 +251,34 @@ def write_reports(
 
     summary_path = report_path / "summary.json"
     summary_path.write_text(summary.model_dump_json(indent=2, exclude_none=True))
+
+
+def archive_screenshots(
+    report_path: Path,
+    source_url: str,
+    started_at: datetime,
+) -> None:
+    """Copy subject screenshots to archive dir if env vars are set."""
+    archive_dir = os.environ.get("SITE_TEST_ARCHIVE_DIR")
+    archive_prefix = os.environ.get("SITE_TEST_ARCHIVE_PREFIX")
+    if not archive_dir or not archive_prefix:
+        return
+
+    archive_path = Path(archive_dir)
+    archive_path.mkdir(parents=True, exist_ok=True)
+
+    domain = source_url.split("://")[-1].split("/")[0]
+    timestamp = started_at.strftime("%Y-%m-%d_%H-%M-%S")
+
+    asserts_dir = report_path / "asserts"
+    if not asserts_dir.exists():
+        return
+
+    for assert_folder in sorted(asserts_dir.iterdir()):
+        if not assert_folder.is_dir():
+            continue
+        subject = assert_folder / "subject.png"
+        if subject.exists():
+            index = assert_folder.name  # "0", "1", etc.
+            filename = f"{archive_prefix}_{domain}_{timestamp}_{int(index):02d}.png"
+            shutil.copy(subject, archive_path / filename)
