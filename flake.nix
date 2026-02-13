@@ -72,10 +72,13 @@
 
         geminiCli = pkgs.callPackage ./agents/gemini/nix { };
 
+        codexCli = pkgs.callPackage ./agents/codex/nix { };
+
         CHROMIUM_EXECUTABLE = lib.getExe pkgs.chromium;
 
-        # Agent template directory (copied into workspace at runtime)
+        # Agent template directories (copied into workspace at runtime)
         agentDir = ./agents/gemini;
+        codexAgentDir = ./agents/codex;
 
         # Wrapper that sets up an isolated workspace and launches Gemini CLI
         geminiClone = pkgs.writeShellScriptBin "gemini-clone" ''
@@ -148,18 +151,97 @@
           # Launch Gemini (use --yolo for non-interactive, omit for TUI)
           exec ${lib.getExe geminiCli} -m gemini-3.1-pro-preview "$@"
         '';
+
+        # Wrapper that sets up an isolated workspace and launches Codex CLI
+        codexClone = pkgs.writeShellScriptBin "codex-clone" ''
+          set -euo pipefail
+
+          # Validate API key
+          if [ -z "''${OPENAI_API_KEY:-}" ]; then
+            echo "ERROR: OPENAI_API_KEY must be set" >&2
+            exit 1
+          fi
+
+          # Workspace is the first argument or current directory
+          WORKSPACE="''${1:-.}"
+          shift || true
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+          mkdir -p "$WORKSPACE"
+          cd "$WORKSPACE"
+          WORKSPACE_ROOT="$PWD"
+
+          # Copy agent context into workspace (mutable copies)
+          if [ ! -f AGENTS.md ]; then
+            cp ${codexAgentDir}/AGENTS.md ./AGENTS.md
+          fi
+          if [ ! -d .codex ]; then
+            cp -r ${codexAgentDir}/.codex ./.codex
+            chmod -R u+w ./.codex
+          fi
+          if [ ! -d .agents ]; then
+            cp -r ${codexAgentDir}/.agents ./.agents
+            chmod -R u+w ./.agents
+          fi
+
+          # Provision recordings (idempotent)
+          if [ ! -d recordings ] && [ -d "$RECORDINGS_SRC" ]; then
+            cp -r "$RECORDINGS_SRC" ./recordings
+            chmod -R u+w ./recordings
+          fi
+
+          # Isolate Codex global config per workspace (at workspace root, not clone/)
+          export CODEX_HOME="$WORKSPACE_ROOT/.codex-home"
+          mkdir -p "$CODEX_HOME"
+
+          # Browser automation
+          export CHROMIUM_PATH="${CHROMIUM_EXECUTABLE}"
+          export AGENT_BROWSER_EXECUTABLE_PATH="${CHROMIUM_EXECUTABLE}"
+
+          # Tools on PATH
+          export PATH="${lib.makeBinPath [
+            codexCli
+            virtualenv
+            agentBrowser
+            pkgs.nodejs_24
+            pkgs.chromium
+            pkgs.ffmpeg
+            pkgs.jujutsu
+            pkgs.git
+          ]}:$PATH"
+
+          # Authenticate with API key
+          printenv OPENAI_API_KEY | ${lib.getExe codexCli} login --with-api-key
+
+          # Screenshot archive for timelapse tracking (at workspace root)
+          export SITE_TEST_ARCHIVE_DIR="$WORKSPACE_ROOT/screenshot-archive"
+          export SITE_TEST_ARCHIVE_PREFIX="gpt-5.3-codex"
+
+          # Clone output directory — agent builds here
+          mkdir -p clone
+          ln -sfn ../recordings clone/recordings
+          cd clone
+
+          # Launch Codex (use --full-auto for non-interactive, omit for TUI)
+          exec ${lib.getExe codexCli} "$@"
+        '';
       in
       {
         packages = {
           agentBrowser = agentBrowser;
           gemini-cli = geminiCli;
           gemini-clone = geminiClone;
+          codex-cli = codexCli;
+          codex-clone = codexClone;
         };
 
         apps = {
           gemini-clone = {
             type = "app";
             program = lib.getExe geminiClone;
+          };
+          codex-clone = {
+            type = "app";
+            program = lib.getExe codexClone;
           };
         };
 
@@ -168,6 +250,7 @@
             virtualenv
             agentBrowser
             geminiCli
+            codexCli
           ] ++ (with pkgs; [
             uv
             chromium
