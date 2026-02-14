@@ -74,11 +74,14 @@
 
         codexCli = pkgs.callPackage ./agents/codex/nix { };
 
+        claudeCli = pkgs.callPackage ./agents/claude/nix { };
+
         CHROMIUM_EXECUTABLE = lib.getExe pkgs.chromium;
 
         # Agent template directories (copied into workspace at runtime)
         agentDir = ./agents/gemini;
         codexAgentDir = ./agents/codex;
+        claudeAgentDir = ./agents/claude;
 
         # Wrapper that sets up an isolated workspace and launches Gemini CLI
         geminiClone = pkgs.writeShellScriptBin "gemini-clone" ''
@@ -224,6 +227,73 @@
           # Launch Codex (use --full-auto for non-interactive, omit for TUI)
           exec ${lib.getExe codexCli} "$@"
         '';
+
+        # Wrapper that sets up an isolated workspace and launches Claude Code
+        claudeClone = pkgs.writeShellScriptBin "claude-clone" ''
+          set -euo pipefail
+
+          # Workspace is the first argument or current directory
+          WORKSPACE="''${1:-.}"
+          shift || true
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+          mkdir -p "$WORKSPACE"
+          cd "$WORKSPACE"
+          WORKSPACE_ROOT="$PWD"
+
+          # Copy agent context into workspace (mutable copies)
+          if [ ! -f CLAUDE.md ]; then
+            cp ${claudeAgentDir}/CLAUDE.md ./CLAUDE.md
+          fi
+          if [ ! -d .claude ]; then
+            cp -r ${claudeAgentDir}/.claude ./.claude
+            chmod -R u+w ./.claude
+          fi
+
+          # Provision recordings (idempotent)
+          if [ ! -d recordings ] && [ -d "$RECORDINGS_SRC" ]; then
+            cp -r "$RECORDINGS_SRC" ./recordings
+            chmod -R u+w ./recordings
+          fi
+
+          # Isolate Claude global config per workspace (at workspace root, not clone/)
+          export CLAUDE_CONFIG_DIR="$WORKSPACE_ROOT/.claude-home"
+          mkdir -p "$CLAUDE_CONFIG_DIR"
+
+          # Bedrock authentication
+          export AWS_BEARER_TOKEN_BEDROCK="''${AWS_BEARER_TOKEN_BEDROCK:-BEDROCK_TOKEN_REMOVED}"
+          export CLAUDE_CODE_USE_BEDROCK="''${CLAUDE_CODE_USE_BEDROCK:-1}"
+          export AWS_REGION="''${AWS_REGION:-us-east-1}"
+          export ANTHROPIC_MODEL="''${ANTHROPIC_MODEL:-us.anthropic.claude-opus-4-5-20251101-v1:0}"
+
+          # Browser automation
+          export CHROMIUM_PATH="${CHROMIUM_EXECUTABLE}"
+          export AGENT_BROWSER_EXECUTABLE_PATH="${CHROMIUM_EXECUTABLE}"
+
+          # Tools on PATH
+          export PATH="${lib.makeBinPath [
+            claudeCli
+            virtualenv
+            agentBrowser
+            pkgs.nodejs_24
+            pkgs.chromium
+            pkgs.ffmpeg
+            pkgs.jujutsu
+            pkgs.git
+          ]}:$PATH"
+
+          # Screenshot archive for timelapse tracking (at workspace root)
+          export SITE_TEST_ARCHIVE_DIR="$WORKSPACE_ROOT/screenshot-archive"
+          export SITE_TEST_ARCHIVE_PREFIX="$ANTHROPIC_MODEL"
+
+          # Clone output directory — agent builds here
+          mkdir -p clone
+          ln -sfn ../recordings clone/recordings
+          cd clone
+
+          # Launch Claude Code (use --dangerously-skip-permissions for non-interactive,
+          # or rely on pre-configured .claude/settings.local.json permissions)
+          exec ${lib.getExe claudeCli} "$@"
+        '';
       in
       {
         packages = {
@@ -232,6 +302,8 @@
           gemini-clone = geminiClone;
           codex-cli = codexCli;
           codex-clone = codexClone;
+          claude-cli = claudeCli;
+          claude-clone = claudeClone;
         };
 
         apps = {
@@ -243,6 +315,10 @@
             type = "app";
             program = lib.getExe codexClone;
           };
+          claude-clone = {
+            type = "app";
+            program = lib.getExe claudeClone;
+          };
         };
 
         devShells.default = pkgs.mkShell {
@@ -251,6 +327,7 @@
             agentBrowser
             geminiCli
             codexCli
+            claudeCli
           ] ++ (with pkgs; [
             uv
             chromium
