@@ -9,16 +9,17 @@
   pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
+  chromium,
 }:
 
 let
-  version = "0.9.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     rev = "v${version}";
-    hash = "sha256-KwwjPR4x/WwA/jWyv2EORWieQqHGoA/eDpQSBeiaUnQ=";
+    hash = "sha256-oDgnxQ09e1IUd1kfgr75TNiYOf5VpMXG9DjfGG4OGwA=";
   };
 
   # Build the Rust CLI binary
@@ -28,7 +29,7 @@ let
 
     sourceRoot = "${src.name}/cli";
 
-    cargoHash = "sha256-WbVSazYTvoH8plEFzK3J9wP9F3mvu1T541T1llAo7Ko=";
+    cargoHash = "sha256-94w9V+NZiWeQ3WbQnsKxVxlvsCaOJR0Wm6XVc85Lo88=";
 
     nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
@@ -87,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     # The CLI spawns the daemon which needs to find node_modules
     makeWrapper ${cli}/bin/agent-browser $out/bin/agent-browser \
       --set AGENT_BROWSER_HOME "$out/lib/agent-browser" \
+      --set AGENT_BROWSER_EXECUTABLE_PATH "${lib.getExe chromium}" \
       --prefix PATH : ${nodejs}/bin
 
     runHook postInstall

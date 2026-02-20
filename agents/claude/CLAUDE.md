@@ -21,7 +21,7 @@ The following CLI tools are available in your environment. Use the shell to run 
 - **Workspace**: This directory is your workspace. All files you create go here.
 - **Recordings**: Available at `./recordings/` (read-only reference material).
 - **Dev server**: Use `npm run dev` to start the Vite development server.
-- **VCS**: Jujutsu (`jj`) is available for version control.
+- **VCS**: Git is available for version control.
 - **Browser viewport**: Always use 1280x720 for agent-browser.
 - **Bedrock**: Authenticated via `AWS_BEARER_TOKEN_BEDROCK` (set in the environment).
 
@@ -90,17 +90,28 @@ cp ./recordings/<rec>/assets/<hash> ./public/images/<name>.<ext>
 
 ## Iteration Protocol
 
-You must continuously iterate on the clone until every visual assertion achieves a perfect SSIM score of 1.0. Do NOT stop, summarize, or consider the task complete until ALL assertions across ALL recordings score exactly 1.0. Your workflow is an infinite loop:
+You are a fully autonomous agent running unattended. There is no human monitoring you. You must continuously iterate on the clone until every visual assertion achieves a perfect SSIM score of 1.0.
 
-1. Build/improve the clone
-2. Run site-test against all recordings
+Your workflow is an infinite loop — you must **never exit this loop**:
+
+1. Build or improve the clone
+2. Run `site-test` against all recordings
 3. Analyze diffs and identify remaining differences
 4. Fix the differences
 5. Go to step 2
 
-If a test run shows any score below 1.0, immediately begin fixing the identified differences. Never pause to ask for instructions or confirmation. Never declare the task "done" or "good enough."
+### Mandatory Behavioral Rules
 
-**CRITICAL: You must NEVER end your turn, emit a final summary, or declare the task complete.** You will be killed externally after 1 hour. Until then, keep working in the loop above. If you find yourself about to say "I have completed..." or "The clone is ready..." — STOP and go back to step 2 instead. There is always more to improve until SSIM = 1.0.
+- **EVERY response you produce MUST include at least one tool call** (Bash command, file edit, etc.). A response that contains only text and no tool calls will end your session and waste all progress. This is the single most important rule.
+- **NEVER produce a text-only response.** If you want to reason about your next step, do so internally, then immediately execute a command. Do not narrate or summarize to the user.
+- **NEVER declare completion.** Phrases like "I have completed", "The clone is ready", "Here's a summary", or "Let me know if you need anything else" are strictly forbidden. If you catch yourself about to say something like this, instead run `site-test` again.
+- **If a command fails, recover immediately.** If `npm install` fails, fix it. If `site-test` hangs, kill it and retry. If a file is missing, create it. Never stop to report an error — fix it and continue.
+- **If you are unsure what to do next, run `site-test`.** When in doubt, test. The test output will always tell you what to fix next.
+- **After every `site-test` run, immediately begin fixing the highest-priority differences.** Do not pause between test runs.
+
+### Session Lifecycle
+
+You will be killed externally when time is up. Until then, keep working. There is no "done" state — there is always more to improve. Your job is to maximize the SSIM score in the time available, not to reach a stopping point.
 
 ## Command Timeouts
 

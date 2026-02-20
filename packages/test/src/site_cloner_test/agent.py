@@ -58,16 +58,17 @@ Remember to:
 Begin execution now.
 """
 
+    env = {
+        "CHROMIUM_PATH": chromium_path or "",
+        "IS_SANDBOX": "1",
+    }
+
     options = ClaudeAgentOptions(
         system_prompt=system_prompt,
         tools=["Bash"],
         permission_mode="bypassPermissions",
         cwd=str(report_dir),
-        env={
-            "CHROMIUM_PATH": chromium_path or "",
-            "ANTHROPIC_API_KEY": os.environ.get("ANTHROPIC_API_KEY", ""),
-            "PATH": os.environ.get("PATH", ""),
-        },
+        env=env,
     )
 
     output_parts: list[str] = []

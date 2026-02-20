@@ -13,7 +13,7 @@ import click
 
 from .agent import execute_screenplay
 from .report import (
-    archive_screenshots,
+    archive_report,
     copy_source_materials,
     create_report_folder,
     generate_execution_log,
@@ -206,7 +206,8 @@ FAILURE_REASON: Agent execution error: {e}
     parsed_result = parse_agent_output(output)
 
     execution_log = generate_execution_log(
-        parsed_result, started_at, completed_at, screenplay_data
+        parsed_result, started_at, completed_at, screenplay_data,
+        report_path=report_path, recording_path=recording_path,
     )
 
     summary = generate_summary(
@@ -219,7 +220,10 @@ FAILURE_REASON: Agent execution error: {e}
 
     write_reports(report_path, execution_log, summary)
 
-    archive_screenshots(report_path, source_url, started_at)
+    try:
+        archive_report(report_path)
+    except Exception as e:
+        click.echo(f"Warning: failed to archive report: {e}", err=True)
 
     return report_path
 

@@ -68,6 +68,18 @@
 
         virtualenv = pythonSet.mkVirtualEnv "cloning-bench-dev-env" workspace.deps.all;
 
+        # Non-editable Python env for Docker containers (no $REPO_ROOT paths)
+        containerPythonSet = (pkgs.callPackage pyproject-nix.build.packages {
+          python = pkgs.python312;
+        }).overrideScope
+          (
+            nixpkgs.lib.composeManyExtensions [
+              pyproject-build-systems.overlays.wheel
+              overlay
+            ]
+          );
+        containerVirtualenv = containerPythonSet.mkVirtualEnv "cloning-bench-container-env" workspace.deps.all;
+
         agentBrowser = pkgs.callPackage ./nix/agent-browser.nix { };
 
         geminiCli = pkgs.callPackage ./agents/gemini/nix { };
@@ -83,64 +95,64 @@
         codexAgentDir = ./agents/codex;
         claudeAgentDir = ./agents/claude;
 
-        # Wrapper that sets up an isolated workspace and launches Gemini CLI
-        geminiClone = pkgs.writeShellScriptBin "gemini-clone" ''
+        # --- Docker container infrastructure ---
+
+        # Packages shared across all agent containers
+        containerPathPkgs = [
+          pkgs.bashInteractive
+          pkgs.coreutils
+          pkgs.findutils
+          pkgs.gnused
+          pkgs.gnugrep
+          pkgs.tmux
+          pkgs.ncurses
+          containerVirtualenv
+          agentBrowser
+          pkgs.nodejs_24
+          pkgs.chromium
+          pkgs.ffmpeg
+          pkgs.git
+          pkgs.curl
+          pkgs.which
+        ];
+
+        # Merge packages into a single env to avoid symlink collisions
+        mkContainerEnv = name: extraPkgs: pkgs.buildEnv {
+          name = "${name}-container-env";
+          paths = containerPathPkgs ++ extraPkgs;
+          ignoreCollisions = true;
+        };
+
+        commonContainerExtras = [
+          pkgs.dockerTools.caCertificates
+          pkgs.dockerTools.fakeNss
+        ];
+
+        # --- Gemini: entrypoint, image, launcher ---
+
+        geminiEntrypoint = pkgs.writeShellScriptBin "gemini-clone-entrypoint" ''
           set -euo pipefail
 
-          # Validate API key
-          if [ -z "''${GEMINI_API_KEY:-}" ]; then
-            echo "ERROR: GEMINI_API_KEY must be set" >&2
-            exit 1
-          fi
-
-          # Capture paths relative to invocation directory before cd
-          PROMPT="$(cat "$(pwd)/prompt.txt")"
-          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
-
-          # Workspace is the first argument or current directory
-          WORKSPACE="''${1:-.}"
-          shift || true
-          mkdir -p "$WORKSPACE"
-          cd "$WORKSPACE"
+          export PROMPT="$(cat /prompt.txt)"
+          cd /workspace
           WORKSPACE_ROOT="$PWD"
 
-          # Copy agent context into workspace (mutable copies - Gemini writes to .gemini/)
+          # Copy agent config (baked into image at /agent-config/)
           if [ ! -f GEMINI.md ]; then
-            cp ${agentDir}/GEMINI.md ./GEMINI.md
+            cp /agent-config/GEMINI.md ./
           fi
           if [ ! -d .gemini ]; then
-            cp -r ${agentDir}/.gemini ./.gemini
+            cp -r /agent-config/.gemini ./
             chmod -R u+w ./.gemini
           fi
 
-          # Provision recordings (idempotent)
-          if [ ! -d recordings ] && [ -d "$RECORDINGS_SRC" ]; then
-            cp -r "$RECORDINGS_SRC" ./recordings
-            chmod -R u+w ./recordings
-          fi
+          # Recordings are bind-mounted at /workspace/recordings (read-only)
 
-          # Isolate Gemini global config per workspace (at workspace root, not clone/)
+          # Isolate Gemini global config
           export GEMINI_CLI_HOME="$WORKSPACE_ROOT/.gemini-home"
-          mkdir -p "$GEMINI_CLI_HOME"
-
-          # Browser automation
-          export CHROMIUM_PATH="${CHROMIUM_EXECUTABLE}"
-          export AGENT_BROWSER_EXECUTABLE_PATH="${CHROMIUM_EXECUTABLE}"
-
-          # Tools on PATH
-          export PATH="${lib.makeBinPath [
-            geminiCli
-            virtualenv
-            agentBrowser
-            pkgs.nodejs_24
-            pkgs.chromium
-            pkgs.ffmpeg
-            pkgs.jujutsu
-            pkgs.git
-          ]}:$PATH"
-
-          # Pre-configure Gemini CLI home (auth, trust, tips)
           mkdir -p "$GEMINI_CLI_HOME/.gemini"
+
+          # Pre-configure auth, trust, tips
           if [ ! -f "$GEMINI_CLI_HOME/.gemini/settings.json" ]; then
             echo '{"security":{"auth":{"selectedType":"gemini-api-key"}}}' > "$GEMINI_CLI_HOME/.gemini/settings.json"
           fi
@@ -151,60 +163,171 @@
             echo '{"tipsShown":1}' > "$GEMINI_CLI_HOME/.gemini/state.json"
           fi
 
-          # Screenshot archive for timelapse tracking (at workspace root)
           export SITE_TEST_ARCHIVE_DIR="$WORKSPACE_ROOT/screenshot-archive"
-          export SITE_TEST_ARCHIVE_PREFIX="gemini-3.1-pro-preview"
 
-          # Clone output directory — agent builds here
           mkdir -p clone
           ln -sfn ../recordings clone/recordings
           cd clone
 
-          # Launch Gemini in non-interactive mode
-          exec ${lib.getExe geminiCli} -m gemini-3.1-pro-preview --yolo "$PROMPT"
+          # Auto-continue watchdog: monitors Gemini session files for model completion
+          # and sends a "continue" message when the model stops
+          cat > /tmp/watchdog.sh << 'WATCHDOG'
+#!/usr/bin/env bash
+GEMINI_HOME="$GEMINI_CLI_HOME/.gemini"
+CONTINUE_MSG="Continue iterating. Run site-test, analyze results, fix issues. Never stop."
+LAST_MTIME=0
+
+sleep 60  # Wait for initial startup
+
+while true; do
+          # Find most recently modified session file
+          LATEST=$(find "$GEMINI_HOME" -name 'session-*.json' -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+
+          if [ -n "$LATEST" ]; then
+            CURRENT_MTIME=$(stat -c %Y "$LATEST" 2>/dev/null || echo 0)
+            NOW=$(date +%s)
+            AGE=$((NOW - CURRENT_MTIME))
+
+            # If session file is stale (>45s) and has a new mtime we haven't seen
+            if [ "$AGE" -gt 45 ] && [ "$CURRENT_MTIME" -gt "$LAST_MTIME" ]; then
+              # Check if last message type is "gemini" (model finished) or "error" (API error)
+              LAST_TYPE=$(grep -o '"type":"[^"]*"' "$LATEST" | tail -1 | sed 's/.*"type":"\([^"]*\)"/\1/')
+              if [ "$LAST_TYPE" = "gemini" ] || [ "$LAST_TYPE" = "error" ]; then
+                LAST_MTIME=$CURRENT_MTIME
+                sleep 5
+                tmux send-keys -t agent -l "$CONTINUE_MSG"
+                sleep 1
+                tmux send-keys -t agent C-m
+              fi
+            fi
+          fi
+          sleep 15
+done
+WATCHDOG
+          chmod +x /tmp/watchdog.sh
+
+          # Start watchdog in background
+          /tmp/watchdog.sh &
+
+          exec tmux new-session -s agent \
+            "${lib.getExe geminiCli} -m gemini-3.1-pro-preview --yolo \"\$PROMPT\""
         '';
 
-        # Wrapper that sets up an isolated workspace and launches Codex CLI
-        codexClone = pkgs.writeShellScriptBin "codex-clone" ''
+        geminiContainerEnv = mkContainerEnv "gemini-clone" [ geminiCli ];
+
+        geminiCloneImage = pkgs.dockerTools.buildLayeredImage {
+          name = "cloning-bench/gemini-clone";
+          tag = "latest";
+
+          contents = commonContainerExtras ++ [
+            geminiContainerEnv
+            geminiEntrypoint
+          ];
+
+          extraCommands = ''
+            mkdir -p tmp workspace root home/agent
+            chmod 1777 tmp
+            mkdir -p usr/bin && ln -sf ${pkgs.coreutils}/bin/env usr/bin/env
+            mkdir -p agent-config
+            cp ${agentDir}/GEMINI.md agent-config/
+            cp -r ${agentDir}/.gemini agent-config/
+
+            # Add non-root agent user for site-test's internal Claude subprocess
+            mkdir -p etc
+            rm -f etc/passwd etc/group
+            cat > etc/passwd <<'PASSWD'
+root:x:0:0:root:/root:/bin/sh
+nobody:x:65534:65534:nobody:/var/empty:/bin/sh
+agent:x:1000:1000:agent:/home/agent:/bin/sh
+PASSWD
+            cat > etc/group <<'GROUP'
+root:x:0:
+nobody:x:65534:
+agent:x:1000:
+GROUP
+          '';
+
+          config = {
+            Entrypoint = [ "${geminiEntrypoint}/bin/gemini-clone-entrypoint" ];
+            WorkingDir = "/workspace";
+            Env = [
+              "PATH=${geminiContainerEnv}/bin"
+              "CHROMIUM_PATH=${CHROMIUM_EXECUTABLE}"
+
+              "HOME=/root"
+              "TERM=xterm-256color"
+              "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
+              "IS_SANDBOX=1"
+              # Bedrock auth for site-test's internal Claude agent
+              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              "CLAUDE_CODE_USE_BEDROCK=1"
+              "AWS_REGION=us-east-1"
+              "ANTHROPIC_MODEL=us.anthropic.claude-sonnet-4-20250514-v1:0"
+            ];
+          };
+        };
+
+        geminiClone = pkgs.writeShellScriptBin "gemini-clone" ''
           set -euo pipefail
 
-          # Validate API key
-          if [ -z "''${OPENAI_API_KEY:-}" ]; then
-            echo "ERROR: OPENAI_API_KEY must be set" >&2
+          if [ -z "''${GEMINI_API_KEY:-}" ]; then
+            echo "ERROR: GEMINI_API_KEY must be set" >&2
             exit 1
           fi
 
-          # Capture paths relative to invocation directory before cd
-          PROMPT="$(cat "$(pwd)/prompt.txt")"
-          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
-
-          # Workspace is the first argument or current directory
           WORKSPACE="''${1:-.}"
           shift || true
           mkdir -p "$WORKSPACE"
-          cd "$WORKSPACE"
+          WORKSPACE="$(cd "$WORKSPACE" && pwd)"
+
+          PROMPT_FILE="$(pwd)/prompt.txt"
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+
+          IMAGE="cloning-bench/gemini-clone:latest"
+
+          if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+            echo "Loading Docker image $IMAGE..."
+            docker load < ${geminiCloneImage}
+          fi
+
+          CONTAINER_NAME="gemini-clone-$(basename "$WORKSPACE")"
+
+          exec docker run --rm -t \
+            --name "$CONTAINER_NAME" \
+            -v "$WORKSPACE:/workspace" \
+            -v "$RECORDINGS_SRC:/workspace/recordings:ro" \
+            -v "$PROMPT_FILE:/prompt.txt:ro" \
+            --shm-size=2g \
+            --cap-add SYS_ADMIN \
+            -e GEMINI_API_KEY \
+            "$IMAGE"
+        '';
+
+        # --- Codex: entrypoint, image, launcher ---
+
+        codexEntrypoint = pkgs.writeShellScriptBin "codex-clone-entrypoint" ''
+          set -euo pipefail
+
+          export PROMPT="$(cat /prompt.txt)"
+          cd /workspace
           WORKSPACE_ROOT="$PWD"
 
-          # Copy agent context into workspace (mutable copies)
+          # Copy agent config (baked into image at /agent-config/)
           if [ ! -f AGENTS.md ]; then
-            cp ${codexAgentDir}/AGENTS.md ./AGENTS.md
+            cp /agent-config/AGENTS.md ./
           fi
           if [ ! -d .codex ]; then
-            cp -r ${codexAgentDir}/.codex ./.codex
+            cp -r /agent-config/.codex ./
             chmod -R u+w ./.codex
           fi
           if [ ! -d .agents ]; then
-            cp -r ${codexAgentDir}/.agents ./.agents
+            cp -r /agent-config/.agents ./
             chmod -R u+w ./.agents
           fi
 
-          # Provision recordings (idempotent)
-          if [ ! -d recordings ] && [ -d "$RECORDINGS_SRC" ]; then
-            cp -r "$RECORDINGS_SRC" ./recordings
-            chmod -R u+w ./recordings
-          fi
+          # Recordings are bind-mounted at /workspace/recordings (read-only)
 
-          # Isolate Codex global config per workspace (at workspace root, not clone/)
+          # Isolate Codex global config
           export CODEX_HOME="$WORKSPACE_ROOT/.codex-home"
           mkdir -p "$CODEX_HOME"
 
@@ -216,108 +339,275 @@
 CODEXCFG
           fi
 
-          # Browser automation
-          export CHROMIUM_PATH="${CHROMIUM_EXECUTABLE}"
-          export AGENT_BROWSER_EXECUTABLE_PATH="${CHROMIUM_EXECUTABLE}"
-
-          # Tools on PATH
-          export PATH="${lib.makeBinPath [
-            codexCli
-            virtualenv
-            agentBrowser
-            pkgs.nodejs_24
-            pkgs.chromium
-            pkgs.ffmpeg
-            pkgs.jujutsu
-            pkgs.git
-          ]}:$PATH"
-
           # Authenticate with API key
           printenv OPENAI_API_KEY | ${lib.getExe codexCli} login --with-api-key
 
-          # Screenshot archive for timelapse tracking (at workspace root)
           export SITE_TEST_ARCHIVE_DIR="$WORKSPACE_ROOT/screenshot-archive"
-          export SITE_TEST_ARCHIVE_PREFIX="gpt-5.3-codex"
 
-          # Clone output directory — agent builds here
           mkdir -p clone
           ln -sfn ../recordings clone/recordings
           cd clone
 
-          # Launch Codex in non-interactive mode
-          exec ${lib.getExe codexCli} --dangerously-bypass-approvals-and-sandbox "$PROMPT"
+          # Auto-continue watchdog: monitors session files for task_complete events
+          # and sends a "continue" message to the codex TUI when the model stops
+          cat > /tmp/watchdog.sh << 'WATCHDOG'
+#!/usr/bin/env bash
+SESSIONS_DIR="$CODEX_HOME/sessions"
+CONTINUE_MSG="Continue iterating. Run site-test, analyze results, fix issues. Never stop."
+LAST_COMPLETE_COUNT=0
+
+sleep 30  # Wait for initial startup
+
+while true; do
+          COMPLETE_COUNT=$(grep -r '"task_complete"' "$SESSIONS_DIR" 2>/dev/null | wc -l)
+          if [ "$COMPLETE_COUNT" -gt "$LAST_COMPLETE_COUNT" ]; then
+            LAST_COMPLETE_COUNT=$COMPLETE_COUNT
+            # Model stopped — wait a moment for TUI to show input prompt, then send continue
+            sleep 5
+            tmux send-keys -t agent -l "$CONTINUE_MSG"
+            sleep 1
+            tmux send-keys -t agent C-m
+          fi
+          sleep 10
+done
+WATCHDOG
+          chmod +x /tmp/watchdog.sh
+
+          # Start watchdog in background
+          /tmp/watchdog.sh &
+
+          exec tmux new-session -s agent \
+            "${lib.getExe codexCli} --model gpt-5.2-codex --dangerously-bypass-approvals-and-sandbox \"\$PROMPT\""
         '';
 
-        # Wrapper that sets up an isolated workspace and launches Claude Code
-        claudeClone = pkgs.writeShellScriptBin "claude-clone" ''
+        codexContainerEnv = mkContainerEnv "codex-clone" [ codexCli ];
+
+        codexCloneImage = pkgs.dockerTools.buildLayeredImage {
+          name = "cloning-bench/codex-clone";
+          tag = "latest";
+
+          contents = commonContainerExtras ++ [
+            codexContainerEnv
+            codexEntrypoint
+          ];
+
+          extraCommands = ''
+            mkdir -p tmp workspace root home/agent
+            chmod 1777 tmp
+            mkdir -p usr/bin && ln -sf ${pkgs.coreutils}/bin/env usr/bin/env
+            mkdir -p agent-config
+            cp ${codexAgentDir}/AGENTS.md agent-config/
+            cp -r ${codexAgentDir}/.codex agent-config/
+            cp -r ${codexAgentDir}/.agents agent-config/
+
+            # Add non-root agent user for site-test's internal Claude subprocess
+            mkdir -p etc
+            rm -f etc/passwd etc/group
+            cat > etc/passwd <<'PASSWD'
+root:x:0:0:root:/root:/bin/sh
+nobody:x:65534:65534:nobody:/var/empty:/bin/sh
+agent:x:1000:1000:agent:/home/agent:/bin/sh
+PASSWD
+            cat > etc/group <<'GROUP'
+root:x:0:
+nobody:x:65534:
+agent:x:1000:
+GROUP
+          '';
+
+          config = {
+            Entrypoint = [ "${codexEntrypoint}/bin/codex-clone-entrypoint" ];
+            WorkingDir = "/workspace";
+            Env = [
+              "PATH=${codexContainerEnv}/bin"
+              "CHROMIUM_PATH=${CHROMIUM_EXECUTABLE}"
+
+              "HOME=/root"
+              "TERM=xterm-256color"
+              "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
+              "IS_SANDBOX=1"
+              # Bedrock auth for site-test's internal Claude agent
+              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              "CLAUDE_CODE_USE_BEDROCK=1"
+              "AWS_REGION=us-east-1"
+              "ANTHROPIC_MODEL=us.anthropic.claude-sonnet-4-20250514-v1:0"
+            ];
+          };
+        };
+
+        codexClone = pkgs.writeShellScriptBin "codex-clone" ''
+          set -euo pipefail
+
+          if [ -z "''${OPENAI_API_KEY:-}" ]; then
+            echo "ERROR: OPENAI_API_KEY must be set" >&2
+            exit 1
+          fi
+
+          WORKSPACE="''${1:-.}"
+          shift || true
+          mkdir -p "$WORKSPACE"
+          WORKSPACE="$(cd "$WORKSPACE" && pwd)"
+
+          PROMPT_FILE="$(pwd)/prompt.txt"
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+
+          IMAGE="cloning-bench/codex-clone:latest"
+
+          if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+            echo "Loading Docker image $IMAGE..."
+            docker load < ${codexCloneImage}
+          fi
+
+          CONTAINER_NAME="codex-clone-$(basename "$WORKSPACE")"
+
+          exec docker run --rm -t \
+            --name "$CONTAINER_NAME" \
+            -v "$WORKSPACE:/workspace" \
+            -v "$RECORDINGS_SRC:/workspace/recordings:ro" \
+            -v "$PROMPT_FILE:/prompt.txt:ro" \
+            --shm-size=2g \
+            --cap-add SYS_ADMIN \
+            -e OPENAI_API_KEY \
+            "$IMAGE"
+        '';
+
+        # --- Claude: entrypoint, image, launcher ---
+
+        claudeEntrypoint = pkgs.writeShellScriptBin "claude-clone-entrypoint" ''
           set -euo pipefail
 
           # Prevent nested-session detection when launched from within Claude Code
           unset CLAUDECODE 2>/dev/null || true
 
-          # Capture paths relative to invocation directory before cd
-          PROMPT="$(cat "$(pwd)/prompt.txt")"
-          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
-
-          # Workspace is the first argument or current directory
-          WORKSPACE="''${1:-.}"
-          shift || true
-          mkdir -p "$WORKSPACE"
-          cd "$WORKSPACE"
+          export PROMPT="$(cat /prompt.txt)"
+          cd /workspace
           WORKSPACE_ROOT="$PWD"
 
-          # Copy agent context into workspace (mutable copies)
+          # Copy agent config (baked into image at /agent-config/)
           if [ ! -f CLAUDE.md ]; then
-            cp ${claudeAgentDir}/CLAUDE.md ./CLAUDE.md
+            cp /agent-config/CLAUDE.md ./
           fi
           if [ ! -d .claude ]; then
-            cp -r ${claudeAgentDir}/.claude ./.claude
+            cp -r /agent-config/.claude ./
             chmod -R u+w ./.claude
           fi
 
-          # Provision recordings (idempotent)
-          if [ ! -d recordings ] && [ -d "$RECORDINGS_SRC" ]; then
-            cp -r "$RECORDINGS_SRC" ./recordings
-            chmod -R u+w ./recordings
-          fi
+          # Recordings are bind-mounted at /workspace/recordings (read-only)
 
-          # Isolate Claude global config per workspace (at workspace root, not clone/)
+          # Isolate Claude global config
           export CLAUDE_CONFIG_DIR="$WORKSPACE_ROOT/.claude-home"
           mkdir -p "$CLAUDE_CONFIG_DIR"
 
-          # Bedrock authentication
-          export AWS_BEARER_TOKEN_BEDROCK="''${AWS_BEARER_TOKEN_BEDROCK:-BEDROCK_TOKEN_REMOVED}"
-          export CLAUDE_CODE_USE_BEDROCK="''${CLAUDE_CODE_USE_BEDROCK:-1}"
-          export AWS_REGION="''${AWS_REGION:-us-east-1}"
-          export ANTHROPIC_MODEL="''${ANTHROPIC_MODEL:-us.anthropic.claude-opus-4-5-20251101-v1:0}"
-
-          # Browser automation
-          export CHROMIUM_PATH="${CHROMIUM_EXECUTABLE}"
-          export AGENT_BROWSER_EXECUTABLE_PATH="${CHROMIUM_EXECUTABLE}"
-
-          # Tools on PATH
-          export PATH="${lib.makeBinPath [
-            claudeCli
-            virtualenv
-            agentBrowser
-            pkgs.nodejs_24
-            pkgs.chromium
-            pkgs.ffmpeg
-            pkgs.jujutsu
-            pkgs.git
-          ]}:$PATH"
-
-          # Screenshot archive for timelapse tracking (at workspace root)
           export SITE_TEST_ARCHIVE_DIR="$WORKSPACE_ROOT/screenshot-archive"
-          export SITE_TEST_ARCHIVE_PREFIX="$ANTHROPIC_MODEL"
 
-          # Clone output directory — agent builds here
           mkdir -p clone
           ln -sfn ../recordings clone/recordings
           cd clone
 
-          # Launch Claude Code in non-interactive mode
-          exec ${lib.getExe claudeCli} --dangerously-skip-permissions -p "$PROMPT"
+          # Write a wrapper script that runs claude in a loop
+          # First run: fresh conversation with original prompt
+          # Subsequent runs: continue the same conversation with --continue
+          CLAUDE_BIN="${lib.getExe claudeCli}"
+          cat > /tmp/run-claude.sh << RUNCLAUDE
+#!/usr/bin/env bash
+CONTINUE_MSG="Continue iterating. Run site-test, analyze results, fix issues. Never stop."
+
+# First run with original prompt
+$CLAUDE_BIN --dangerously-skip-permissions -p "\$PROMPT"
+
+# Auto-continue loop: when claude exits, restart with --continue
+while true; do
+  sleep 5
+  echo "[watchdog] Claude exited, restarting with --continue..."
+  $CLAUDE_BIN --dangerously-skip-permissions --continue -p "\$CONTINUE_MSG"
+done
+RUNCLAUDE
+          chmod +x /tmp/run-claude.sh
+
+          exec tmux new-session -s agent /tmp/run-claude.sh
+        '';
+
+        claudeContainerEnv = mkContainerEnv "claude-clone" [ claudeCli ];
+
+        claudeCloneImage = pkgs.dockerTools.buildLayeredImage {
+          name = "cloning-bench/claude-clone";
+          tag = "latest";
+
+          contents = commonContainerExtras ++ [
+            claudeContainerEnv
+            claudeEntrypoint
+          ];
+
+          extraCommands = ''
+            mkdir -p tmp workspace home/agent
+            chmod 1777 tmp
+            mkdir -p usr/bin && ln -sf ${pkgs.coreutils}/bin/env usr/bin/env
+            mkdir -p agent-config
+            cp ${claudeAgentDir}/CLAUDE.md agent-config/
+            cp -r ${claudeAgentDir}/.claude agent-config/
+
+            # Replace fakeNss passwd/group with versions that include non-root agent user
+            mkdir -p etc
+            rm -f etc/passwd etc/group
+            cat > etc/passwd <<'PASSWD'
+root:x:0:0:root:/root:/bin/sh
+nobody:x:65534:65534:nobody:/var/empty:/bin/sh
+agent:x:1000:1000:agent:/home/agent:/bin/sh
+PASSWD
+            cat > etc/group <<'GROUP'
+root:x:0:
+nobody:x:65534:
+agent:x:1000:
+GROUP
+          '';
+
+          config = {
+            Entrypoint = [ "${claudeEntrypoint}/bin/claude-clone-entrypoint" ];
+            WorkingDir = "/workspace";
+            Env = [
+              "PATH=${claudeContainerEnv}/bin"
+              "CHROMIUM_PATH=${CHROMIUM_EXECUTABLE}"
+
+              "HOME=/root"
+              "TERM=xterm-256color"
+              "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
+              "IS_SANDBOX=1"
+              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              "CLAUDE_CODE_USE_BEDROCK=1"
+              "AWS_REGION=us-east-1"
+              "ANTHROPIC_MODEL=us.anthropic.claude-opus-4-6-v1"
+            ];
+          };
+        };
+
+        claudeClone = pkgs.writeShellScriptBin "claude-clone" ''
+          set -euo pipefail
+
+          WORKSPACE="''${1:-.}"
+          shift || true
+          mkdir -p "$WORKSPACE"
+          WORKSPACE="$(cd "$WORKSPACE" && pwd)"
+
+          PROMPT_FILE="$(pwd)/prompt.txt"
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+
+          IMAGE="cloning-bench/claude-clone:latest"
+
+          if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+            echo "Loading Docker image $IMAGE..."
+            docker load < ${claudeCloneImage}
+          fi
+
+          CONTAINER_NAME="claude-clone-$(basename "$WORKSPACE")"
+
+          exec docker run --rm -t \
+            --name "$CONTAINER_NAME" \
+            -v "$WORKSPACE:/workspace" \
+            -v "$RECORDINGS_SRC:/workspace/recordings:ro" \
+            -v "$PROMPT_FILE:/prompt.txt:ro" \
+            --shm-size=2g \
+            --cap-add SYS_ADMIN \
+            "$IMAGE"
         '';
         # Extract conversation transcripts from a workspace into transcripts/
         extractTranscripts = pkgs.writeShellScriptBin "extract-transcripts" ''
@@ -467,7 +757,7 @@ CODEXCFG
               [.[] | select(.type == "assistant" and .message.usage != null) | .message.usage] |
               {
                 agent: "claude",
-                model: "claude-opus-4",
+                model: "claude-opus-4.6",
                 api_calls: length,
                 input_tokens: (map(.input_tokens // 0) | add),
                 output_tokens: (map(.output_tokens // 0) | add),
@@ -608,10 +898,13 @@ CODEXCFG
           agentBrowser = agentBrowser;
           gemini-cli = geminiCli;
           gemini-clone = geminiClone;
+          gemini-clone-image = geminiCloneImage;
           codex-cli = codexCli;
           codex-clone = codexClone;
+          codex-clone-image = codexCloneImage;
           claude-cli = claudeCli;
           claude-clone = claudeClone;
+          claude-clone-image = claudeCloneImage;
           extract-transcripts = extractTranscripts;
         };
 
@@ -646,7 +939,6 @@ CODEXCFG
             chromium
             ffmpeg
             nodejs_24
-            jujutsu
             git
           ]);
           env = {
@@ -654,7 +946,6 @@ CODEXCFG
             UV_PYTHON = pythonSet.python.interpreter;
             UV_PYTHON_DOWNLOADS = "never";
             CHROMIUM_PATH = CHROMIUM_EXECUTABLE;
-            AGENT_BROWSER_EXECUTABLE_PATH = CHROMIUM_EXECUTABLE;
           };
           shellHook = ''
             unset PYTHONPATH

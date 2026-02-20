@@ -25,6 +25,12 @@ class StepResult(BaseModel):
     status: Literal["completed", "skipped", "failed"] = Field(
         description="Execution status"
     )
+    started_at: str | None = Field(
+        default=None, description="ISO 8601 datetime when step execution started"
+    )
+    completed_at: str | None = Field(
+        default=None, description="ISO 8601 datetime when step execution completed"
+    )
     screenshot_captured: str | None = Field(
         default=None, description="Path to captured screenshot if applicable"
     )

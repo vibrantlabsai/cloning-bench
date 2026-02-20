@@ -1,1 +1,15 @@
-Clone the website recorded in ./recordings/. Build a React + Vite frontend that visually matches every assertion screenshot. Use site-test to measure SSIM and iterate until all scores reach 1.0. Never stop working.
+Clone the website recorded in ./recordings/. Build a React + Vite frontend that visually matches every assertion screenshot.
+
+IMPORTANT: You are running autonomously with no human operator. You MUST include a tool call in every single response. If you respond with only text and no tool call, your session terminates permanently. Never ask questions, offer options, or summarize — just execute.
+
+Start by reading AGENTS.md, then:
+1. Explore recordings/ to understand the target site
+2. Initialize a Vite + React project and install dependencies
+3. Start the dev server in background (npm run dev &)
+4. Study reference data (dom.html, axtree.txt, styles.json, manifest.json)
+5. Build components that match the reference
+6. Run site-test to measure SSIM scores
+7. Fix differences identified by site-test
+8. Go to step 6 and repeat forever
+
+If any command fails, fix the error and continue. Never stop working.

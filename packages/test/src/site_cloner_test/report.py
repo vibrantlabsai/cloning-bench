@@ -4,7 +4,7 @@ import json
 import os
 import re
 import shutil
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 from .schema import (
@@ -15,7 +15,7 @@ from .schema import (
     StepResult,
     Summary,
 )
-from .visual import extract_screenshot_index
+from .visual import extract_screenshot_index, prepare_assertion_folder
 
 
 def create_report_folder(
@@ -112,9 +112,21 @@ def parse_agent_output(output: str) -> dict:
             if type_match:
                 step["type"] = type_match.group(1)
 
-            desc_match = re.search(r"DESCRIPTION:\s*(.+?)(?:\nSCREENSHOT:|$)", block, re.DOTALL)
+            desc_match = re.search(r"DESCRIPTION:\s*(.+?)(?:\nSTARTED_AT:|\nSCREENSHOT:|$)", block, re.DOTALL)
             if desc_match:
                 step["description"] = desc_match.group(1).strip()
+
+            started_match = re.search(r"STARTED_AT:\s*(.+?)(?:\n|$)", block)
+            if started_match:
+                started = started_match.group(1).strip()
+                if started.lower() != "none":
+                    step["started_at"] = started
+
+            completed_match = re.search(r"COMPLETED_AT:\s*(.+?)(?:\n|$)", block)
+            if completed_match:
+                completed = completed_match.group(1).strip()
+                if completed.lower() != "none":
+                    step["completed_at"] = completed
 
             screenshot_match = re.search(r"SCREENSHOT:\s*(.+?)(?:\nASSERTION:|$)", block, re.DOTALL)
             if screenshot_match:
@@ -141,6 +153,8 @@ def generate_execution_log(
     started_at: datetime,
     completed_at: datetime,
     screenplay_data: dict,
+    report_path: Path | None = None,
+    recording_path: Path | None = None,
 ) -> ExecutionLog:
     """Generate the execution log from parsed agent output."""
     screenplay_steps = screenplay_data.get("steps", [])
@@ -159,6 +173,11 @@ def generate_execution_log(
             if screenplay_step and "screenshot" in screenplay_step:
                 try:
                     screenshot_index = extract_screenshot_index(screenplay_step["screenshot"])
+
+                    # Copy recording.png into the assertion folder
+                    if report_path and recording_path:
+                        prepare_assertion_folder(report_path, screenshot_index, recording_path)
+
                     assertion = AssertionComparison(
                         screenshot_index=screenshot_index,
                         recording_path=f"asserts/{screenshot_index}/recording.png",
@@ -176,6 +195,8 @@ def generate_execution_log(
                 type=step_type,
                 description=step_data.get("description", ""),
                 status=step_data.get("status", "failed"),
+                started_at=step_data.get("started_at"),
+                completed_at=step_data.get("completed_at"),
                 screenshot_captured=step_data.get("screenshot_captured"),
                 notes=step_data.get("notes"),
                 assertion=assertion,
@@ -253,32 +274,16 @@ def write_reports(
     summary_path.write_text(summary.model_dump_json(indent=2, exclude_none=True))
 
 
-def archive_screenshots(
+def archive_report(
     report_path: Path,
-    source_url: str,
-    started_at: datetime,
 ) -> None:
-    """Copy subject screenshots to archive dir if env vars are set."""
+    """Copy full report folder to archive dir if env var is set."""
     archive_dir = os.environ.get("SITE_TEST_ARCHIVE_DIR")
-    archive_prefix = os.environ.get("SITE_TEST_ARCHIVE_PREFIX")
-    if not archive_dir or not archive_prefix:
+    if not archive_dir:
         return
 
     archive_path = Path(archive_dir)
     archive_path.mkdir(parents=True, exist_ok=True)
 
-    domain = source_url.split("://")[-1].split("/")[0]
-    timestamp = started_at.strftime("%Y-%m-%d_%H-%M-%S")
-
-    asserts_dir = report_path / "asserts"
-    if not asserts_dir.exists():
-        return
-
-    for assert_folder in sorted(asserts_dir.iterdir()):
-        if not assert_folder.is_dir():
-            continue
-        subject = assert_folder / "subject.png"
-        if subject.exists():
-            index = assert_folder.name  # "0", "1", etc.
-            filename = f"{archive_prefix}_{domain}_{timestamp}_{int(index):02d}.png"
-            shutil.copy(subject, archive_path / filename)
+    dest = archive_path / report_path.name
+    shutil.copytree(report_path, dest, dirs_exist_ok=True)

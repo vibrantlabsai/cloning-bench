@@ -113,11 +113,15 @@ Then for each step, output:
 STEP <step_number>: <completed|skipped|failed>
 TYPE: <action|assert|wait>
 DESCRIPTION: <step description>
+STARTED_AT: <ISO 8601 datetime when you started this step, e.g. 2026-02-24T22:03:15+00:00>
+COMPLETED_AT: <ISO 8601 datetime when you finished this step, e.g. 2026-02-24T22:03:22+00:00>
 SCREENSHOT: <path if captured, otherwise "none">
 ASSERTION: <PASSED or FAILED if assert step, otherwise "none">
 NOTES: <any notes about adaptations, reasoning for assertion judgment, or issues>
 ---
 ```
+
+To get the current time for STARTED_AT/COMPLETED_AT, run `date -u +%Y-%m-%dT%H:%M:%S+00:00` before and after each step.
 
 End with:
 ```
