@@ -93,10 +93,13 @@
             exit 1
           fi
 
+          # Capture paths relative to invocation directory before cd
+          PROMPT="$(cat "$(pwd)/prompt.txt")"
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+
           # Workspace is the first argument or current directory
           WORKSPACE="''${1:-.}"
           shift || true
-          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
           mkdir -p "$WORKSPACE"
           cd "$WORKSPACE"
           WORKSPACE_ROOT="$PWD"
@@ -136,10 +139,16 @@
             pkgs.git
           ]}:$PATH"
 
-          # Pre-configure trust and yolo mode in GEMINI_CLI_HOME if not already set
+          # Pre-configure Gemini CLI home (auth, trust, tips)
           mkdir -p "$GEMINI_CLI_HOME/.gemini"
+          if [ ! -f "$GEMINI_CLI_HOME/.gemini/settings.json" ]; then
+            echo '{"security":{"auth":{"selectedType":"gemini-api-key"}}}' > "$GEMINI_CLI_HOME/.gemini/settings.json"
+          fi
           if [ ! -f "$GEMINI_CLI_HOME/.gemini/trustedFolders.json" ]; then
             echo "{\"$WORKSPACE_ROOT/clone\": \"TRUST_FOLDER\"}" > "$GEMINI_CLI_HOME/.gemini/trustedFolders.json"
+          fi
+          if [ ! -f "$GEMINI_CLI_HOME/.gemini/state.json" ]; then
+            echo '{"tipsShown":1}' > "$GEMINI_CLI_HOME/.gemini/state.json"
           fi
 
           # Screenshot archive for timelapse tracking (at workspace root)
@@ -151,8 +160,8 @@
           ln -sfn ../recordings clone/recordings
           cd clone
 
-          # Launch Gemini (use --yolo for non-interactive, omit for TUI)
-          exec ${lib.getExe geminiCli} -m gemini-3.1-pro-preview "$@"
+          # Launch Gemini in non-interactive mode
+          exec ${lib.getExe geminiCli} -m gemini-3.1-pro-preview --yolo "$PROMPT"
         '';
 
         # Wrapper that sets up an isolated workspace and launches Codex CLI
@@ -165,10 +174,13 @@
             exit 1
           fi
 
+          # Capture paths relative to invocation directory before cd
+          PROMPT="$(cat "$(pwd)/prompt.txt")"
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+
           # Workspace is the first argument or current directory
           WORKSPACE="''${1:-.}"
           shift || true
-          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
           mkdir -p "$WORKSPACE"
           cd "$WORKSPACE"
           WORKSPACE_ROOT="$PWD"
@@ -195,6 +207,14 @@
           # Isolate Codex global config per workspace (at workspace root, not clone/)
           export CODEX_HOME="$WORKSPACE_ROOT/.codex-home"
           mkdir -p "$CODEX_HOME"
+
+          # Pre-configure model migration notice (skip interactive prompt)
+          if [ ! -f "$CODEX_HOME/config.toml" ]; then
+            cat > "$CODEX_HOME/config.toml" << 'CODEXCFG'
+[notice.model_migrations]
+"gpt-5.2-codex" = "gpt-5.3-codex"
+CODEXCFG
+          fi
 
           # Browser automation
           export CHROMIUM_PATH="${CHROMIUM_EXECUTABLE}"
@@ -224,18 +244,24 @@
           ln -sfn ../recordings clone/recordings
           cd clone
 
-          # Launch Codex (use --full-auto for non-interactive, omit for TUI)
-          exec ${lib.getExe codexCli} "$@"
+          # Launch Codex in non-interactive mode
+          exec ${lib.getExe codexCli} --dangerously-bypass-approvals-and-sandbox "$PROMPT"
         '';
 
         # Wrapper that sets up an isolated workspace and launches Claude Code
         claudeClone = pkgs.writeShellScriptBin "claude-clone" ''
           set -euo pipefail
 
+          # Prevent nested-session detection when launched from within Claude Code
+          unset CLAUDECODE 2>/dev/null || true
+
+          # Capture paths relative to invocation directory before cd
+          PROMPT="$(cat "$(pwd)/prompt.txt")"
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+
           # Workspace is the first argument or current directory
           WORKSPACE="''${1:-.}"
           shift || true
-          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
           mkdir -p "$WORKSPACE"
           cd "$WORKSPACE"
           WORKSPACE_ROOT="$PWD"
@@ -290,9 +316,8 @@
           ln -sfn ../recordings clone/recordings
           cd clone
 
-          # Launch Claude Code (use --dangerously-skip-permissions for non-interactive,
-          # or rely on pre-configured .claude/settings.local.json permissions)
-          exec ${lib.getExe claudeCli} "$@"
+          # Launch Claude Code in non-interactive mode
+          exec ${lib.getExe claudeCli} --dangerously-skip-permissions -p "$PROMPT"
         '';
         # Extract conversation transcripts from a workspace into transcripts/
         extractTranscripts = pkgs.writeShellScriptBin "extract-transcripts" ''

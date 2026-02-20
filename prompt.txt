@@ -1,0 +1,1 @@
+Clone the website recorded in ./recordings/. Build a React + Vite frontend that visually matches every assertion screenshot. Use site-test to measure SSIM and iterate until all scores reach 1.0. Never stop working.
