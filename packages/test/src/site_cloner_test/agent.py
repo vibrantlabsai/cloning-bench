@@ -61,7 +61,19 @@ Begin execution now.
     env = {
         "CHROMIUM_PATH": chromium_path or "",
         "IS_SANDBOX": "1",
+        "HOME": "/home/agent" if os.getuid() == 0 else os.environ.get("HOME", ""),
     }
+
+    # When running as root (e.g. inside Docker), Claude CLI refuses
+    # bypassPermissions mode.  Drop to the non-root "agent" user (uid 1000)
+    # that is baked into the container image.
+    user = "agent" if os.getuid() == 0 else None
+    if user:
+        import subprocess
+        # Ensure the agent user can write to the report dir and its HOME
+        subprocess.run(["chown", "-R", "agent:agent", str(report_dir)], check=False)
+        subprocess.run(["mkdir", "-p", "/home/agent"], check=False)
+        subprocess.run(["chown", "-R", "agent:agent", "/home/agent"], check=False)
 
     options = ClaudeAgentOptions(
         system_prompt=system_prompt,
@@ -69,6 +81,7 @@ Begin execution now.
         permission_mode="bypassPermissions",
         cwd=str(report_dir),
         env=env,
+        user=user,
     )
 
     output_parts: list[str] = []

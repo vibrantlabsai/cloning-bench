@@ -377,7 +377,7 @@ WATCHDOG
           /tmp/watchdog.sh &
 
           exec tmux new-session -s agent \
-            "${lib.getExe codexCli} --model gpt-5.2-codex --dangerously-bypass-approvals-and-sandbox \"\$PROMPT\""
+            "${lib.getExe codexCli} --model gpt-5.3-codex --dangerously-bypass-approvals-and-sandbox \"\$PROMPT\""
         '';
 
         codexContainerEnv = mkContainerEnv "codex-clone" [ codexCli ];
@@ -713,7 +713,7 @@ GROUP
               $JQ -s '[.[] | select(.type == "event_msg" and .payload.type == "token_count")] | last | .payload.info.total_token_usage' "$f"
             done) | $JQ -s '{
               agent: "codex",
-              model: "gpt-5.2-codex",
+              model: "gpt-5.3-codex",
               sessions: length,
               input_tokens: (map(.input_tokens // 0) | add),
               cached_input_tokens: (map(.cached_input_tokens // 0) | add),
@@ -770,7 +770,7 @@ GROUP
 
           # --- Cost report ---
           # Pricing per million tokens (USD)
-          # Codex gpt-5.2-codex: $1.75 input, $0.175 cached, $14.00 output
+          # Codex gpt-5.3-codex: $1.75 input, $0.175 cached, $14.00 output
           # Gemini 3 Pro Preview (<=200K): $2.00 input, $0.20 cached, $12.00 output (includes thinking)
           # Claude Opus 4.5/4.6: $5.00 input, $10.00 cache write (1h), $0.50 cache read, $25.00 output
           echo ""
