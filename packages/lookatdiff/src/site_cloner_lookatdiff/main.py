@@ -69,11 +69,13 @@ def cli(subject: Path, diff: Path, actual: Path, question: str | None) -> None:
     ACTUAL: Path to the target UI screenshot (what we want)
     """
     api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        click.echo("Error: GEMINI_API_KEY environment variable is not set", err=True)
+    if api_key:
+        client = genai.Client(api_key=api_key)
+    elif os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+        client = genai.Client(vertexai=True)
+    else:
+        click.echo("Error: Set GEMINI_API_KEY or GOOGLE_APPLICATION_CREDENTIALS", err=True)
         sys.exit(1)
-
-    client = genai.Client(api_key=api_key)
 
     # Load images as bytes
     subject_bytes = subject.read_bytes()

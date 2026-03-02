@@ -73,14 +73,19 @@ class RegionVerification:
 def _get_gemini_client():
     """Get the Gemini client, returns None if API key not available."""
     api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        logger.warning("GEMINI_API_KEY not set, LLM detection disabled")
+    google_creds = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+
+    if not api_key and not google_creds:
+        logger.warning("GEMINI_API_KEY / GOOGLE_APPLICATION_CREDENTIALS not set, LLM detection disabled")
         return None
 
     try:
         from google import genai
 
-        return genai.Client(api_key=api_key)
+        if api_key:
+            return genai.Client(api_key=api_key)
+        else:
+            return genai.Client(vertexai=True)
     except ImportError:
         logger.warning("google-genai not installed, LLM detection disabled")
         return None

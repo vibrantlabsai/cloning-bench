@@ -152,9 +152,17 @@
           export GEMINI_CLI_HOME="$WORKSPACE_ROOT/.gemini-home"
           mkdir -p "$GEMINI_CLI_HOME/.gemini"
 
-          # Pre-configure auth, trust, tips
+          # Pre-configure auth (Vertex AI), trust, tips
           if [ ! -f "$GEMINI_CLI_HOME/.gemini/settings.json" ]; then
-            echo '{"security":{"auth":{"selectedType":"gemini-api-key"}}}' > "$GEMINI_CLI_HOME/.gemini/settings.json"
+            echo '{"security":{"auth":{"selectedType":"vertex-ai"}}}' > "$GEMINI_CLI_HOME/.gemini/settings.json"
+          fi
+          # Vertex AI credentials via .env
+          if [ ! -f "$GEMINI_CLI_HOME/.gemini/.env" ]; then
+            cat > "$GEMINI_CLI_HOME/.gemini/.env" <<ENVEOF
+GOOGLE_APPLICATION_CREDENTIALS=/sa-key.json
+GOOGLE_CLOUD_PROJECT=gen-lang-client-0752584039
+GOOGLE_CLOUD_LOCATION=global
+ENVEOF
           fi
           if [ ! -f "$GEMINI_CLI_HOME/.gemini/trustedFolders.json" ]; then
             echo "{\"$WORKSPACE_ROOT/clone\": \"TRUST_FOLDER\"}" > "$GEMINI_CLI_HOME/.gemini/trustedFolders.json"
@@ -258,6 +266,10 @@ GROUP
               "TERM=xterm-256color"
               "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
               "IS_SANDBOX=1"
+              # Vertex AI auth for lookatdiff / site-test LLM mask
+              "GOOGLE_APPLICATION_CREDENTIALS=/sa-key.json"
+              "GOOGLE_CLOUD_PROJECT=gen-lang-client-0752584039"
+              "GOOGLE_CLOUD_LOCATION=global"
               # Bedrock auth for site-test's internal Claude agent
               "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
               "CLAUDE_CODE_USE_BEDROCK=1"
@@ -269,11 +281,6 @@ GROUP
 
         geminiClone = pkgs.writeShellScriptBin "gemini-clone" ''
           set -euo pipefail
-
-          if [ -z "''${GEMINI_API_KEY:-}" ]; then
-            echo "ERROR: GEMINI_API_KEY must be set" >&2
-            exit 1
-          fi
 
           WORKSPACE="''${1:-.}"
           shift || true
@@ -299,7 +306,6 @@ GROUP
             -v "$PROMPT_FILE:/prompt.txt:ro" \
             --shm-size=2g \
             --cap-add SYS_ADMIN \
-            -e GEMINI_API_KEY \
             "$IMAGE"
         '';
 
