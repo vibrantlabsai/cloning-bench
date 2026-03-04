@@ -114,7 +114,17 @@
           pkgs.git
           pkgs.curl
           pkgs.which
+          # Font rendering: Chromium needs fontconfig + actual font files to
+          # rasterize any text (including custom @font-face web fonts).
+          # Without these, all text is invisible in headless screenshots.
+          pkgs.fontconfig
+          pkgs.liberation_ttf
         ];
+
+        # Generate a fonts.conf that points fontconfig at the Nix store font paths
+        containerFontsConf = pkgs.makeFontsConf {
+          fontDirectories = [ pkgs.liberation_ttf ];
+        };
 
         # Merge packages into a single env to avoid symlink collisions
         mkContainerEnv = name: extraPkgs: pkgs.buildEnv {
@@ -134,6 +144,7 @@
           set -euo pipefail
 
           export PROMPT="$(cat /prompt.txt)"
+          export NODE_OPTIONS="--max-old-space-size=16384"
           cd /workspace
           WORKSPACE_ROOT="$PWD"
 
@@ -152,17 +163,9 @@
           export GEMINI_CLI_HOME="$WORKSPACE_ROOT/.gemini-home"
           mkdir -p "$GEMINI_CLI_HOME/.gemini"
 
-          # Pre-configure auth (Vertex AI), trust, tips
+          # Pre-configure auth (API key), trust, tips, loop detection
           if [ ! -f "$GEMINI_CLI_HOME/.gemini/settings.json" ]; then
-            echo '{"security":{"auth":{"selectedType":"vertex-ai"}}}' > "$GEMINI_CLI_HOME/.gemini/settings.json"
-          fi
-          # Vertex AI credentials via .env
-          if [ ! -f "$GEMINI_CLI_HOME/.gemini/.env" ]; then
-            cat > "$GEMINI_CLI_HOME/.gemini/.env" <<ENVEOF
-GOOGLE_APPLICATION_CREDENTIALS=/sa-key.json
-GOOGLE_CLOUD_PROJECT=gen-lang-client-0752584039
-GOOGLE_CLOUD_LOCATION=global
-ENVEOF
+            echo '{"security":{"auth":{"selectedType":"gemini-api-key"}},"tools":{"sandbox":false},"disableLoopDetection":true}' > "$GEMINI_CLI_HOME/.gemini/settings.json"
           fi
           if [ ! -f "$GEMINI_CLI_HOME/.gemini/trustedFolders.json" ]; then
             echo "{\"$WORKSPACE_ROOT/clone\": \"TRUST_FOLDER\"}" > "$GEMINI_CLI_HOME/.gemini/trustedFolders.json"
@@ -183,26 +186,74 @@ ENVEOF
 #!/usr/bin/env bash
 GEMINI_HOME="$GEMINI_CLI_HOME/.gemini"
 CONTINUE_MSG="Continue iterating. Run site-test, analyze results, fix issues. Never stop."
-LAST_MTIME=0
+LAST_NUDGE=0
+STALE_THRESHOLD=120  # seconds before considering session stale
 
 sleep 60  # Wait for initial startup
 
 while true; do
-          # Find most recently modified session file
+          NOW=$(date +%s)
+
+          # --- Crash recovery: if gemini node process died, restart it ---
+          GEMINI_ALIVE=0
+          for p in /proc/[0-9]*/cmdline; do
+            if grep -q "gemini.js" "$p" 2>/dev/null; then
+              GEMINI_ALIVE=1
+              break
+            fi
+          done
+          if [ "$GEMINI_ALIVE" -eq 0 ]; then
+            echo "[watchdog] Gemini CLI process not found, restarting..." >&2
+            sleep 5
+            tmux send-keys -t agent "${lib.getExe geminiCli} -m gemini-3.1-pro-preview --yolo \"\$PROMPT\"" C-m 2>/dev/null
+            sleep 30
+            continue
+          fi
+
+          # --- Staleness detection ---
           LATEST=$(find "$GEMINI_HOME" -name 'session-*.json' -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
 
           if [ -n "$LATEST" ]; then
             CURRENT_MTIME=$(stat -c %Y "$LATEST" 2>/dev/null || echo 0)
-            NOW=$(date +%s)
             AGE=$((NOW - CURRENT_MTIME))
+            SINCE_NUDGE=$((NOW - LAST_NUDGE))
 
-            # If session file is stale (>45s) and has a new mtime we haven't seen
-            if [ "$AGE" -gt 45 ] && [ "$CURRENT_MTIME" -gt "$LAST_MTIME" ]; then
-              # Check if last message type is "gemini" (model finished) or "error" (API error)
-              LAST_TYPE=$(grep -o '"type":"[^"]*"' "$LATEST" | tail -1 | sed 's/.*"type":"\([^"]*\)"/\1/')
+            # Check if last message indicates completion or error
+            LAST_TYPE=$(grep -o '"type":"[^"]*"' "$LATEST" | tail -1 | sed 's/.*"type":"\([^"]*\)"/\1/')
+            NEEDS_NUDGE=0
+
+            # Case 1: Session ended normally (model finished) or hit error
+            if [ "$AGE" -gt 45 ]; then
               if [ "$LAST_TYPE" = "gemini" ] || [ "$LAST_TYPE" = "error" ]; then
-                LAST_MTIME=$CURRENT_MTIME
-                sleep 5
+                NEEDS_NUDGE=1
+              fi
+            fi
+
+            # Case 2: Absolute staleness - session hasn't updated in STALE_THRESHOLD seconds
+            # This catches API errors that don't write to session file
+            if [ "$AGE" -gt "$STALE_THRESHOLD" ]; then
+              NEEDS_NUDGE=1
+            fi
+
+            # Only nudge if we haven't nudged recently (avoid spamming)
+            if [ "$NEEDS_NUDGE" -eq 1 ] && [ "$SINCE_NUDGE" -gt 60 ]; then
+              TMUX_CONTENT=$(tmux capture-pane -t agent -p 2>/dev/null)
+
+              # Check for loop detection dialog and dismiss it
+              if echo "$TMUX_CONTENT" | grep -q "loop detection"; then
+                echo "[watchdog] Loop detection dialog found, dismissing..." >&2
+                LAST_NUDGE=$NOW
+                tmux send-keys -t agent Down 2>/dev/null
+                sleep 1
+                tmux send-keys -t agent Enter 2>/dev/null
+                sleep 3
+              # Check if agent has an active spinner (esc to cancel) - do NOT interrupt
+              elif echo "$TMUX_CONTENT" | grep -q "esc to cancel"; then
+                echo "[watchdog] Agent has active spinner, skipping nudge (age=$AGE s)" >&2
+              # Agent is idle at prompt - safe to nudge
+              else
+                echo "[watchdog] Nudging idle agent (age=$AGE s, type=$LAST_TYPE)" >&2
+                LAST_NUDGE=$NOW
                 tmux send-keys -t agent -l "$CONTINUE_MSG"
                 sleep 1
                 tmux send-keys -t agent C-m
@@ -261,15 +312,12 @@ GROUP
             Env = [
               "PATH=${geminiContainerEnv}/bin"
               "CHROMIUM_PATH=${CHROMIUM_EXECUTABLE}"
+              "FONTCONFIG_FILE=${containerFontsConf}"
 
               "HOME=/root"
               "TERM=xterm-256color"
               "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
               "IS_SANDBOX=1"
-              # Vertex AI auth for lookatdiff / site-test LLM mask
-              "GOOGLE_APPLICATION_CREDENTIALS=/sa-key.json"
-              "GOOGLE_CLOUD_PROJECT=gen-lang-client-0752584039"
-              "GOOGLE_CLOUD_LOCATION=global"
               # Bedrock auth for site-test's internal Claude agent
               "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
               "CLAUDE_CODE_USE_BEDROCK=1"
@@ -281,6 +329,11 @@ GROUP
 
         geminiClone = pkgs.writeShellScriptBin "gemini-clone" ''
           set -euo pipefail
+
+          if [ -z "''${GEMINI_API_KEY:-}" ]; then
+            echo "ERROR: GEMINI_API_KEY must be set" >&2
+            exit 1
+          fi
 
           WORKSPACE="''${1:-.}"
           shift || true
@@ -306,6 +359,7 @@ GROUP
             -v "$PROMPT_FILE:/prompt.txt:ro" \
             --shm-size=2g \
             --cap-add SYS_ADMIN \
+            -e GEMINI_API_KEY \
             "$IMAGE"
         '';
 
@@ -427,6 +481,7 @@ GROUP
             Env = [
               "PATH=${codexContainerEnv}/bin"
               "CHROMIUM_PATH=${CHROMIUM_EXECUTABLE}"
+              "FONTCONFIG_FILE=${containerFontsConf}"
 
               "HOME=/root"
               "TERM=xterm-256color"
@@ -573,6 +628,7 @@ GROUP
             Env = [
               "PATH=${claudeContainerEnv}/bin"
               "CHROMIUM_PATH=${CHROMIUM_EXECUTABLE}"
+              "FONTCONFIG_FILE=${containerFontsConf}"
 
               "HOME=/root"
               "TERM=xterm-256color"
@@ -898,6 +954,7 @@ GROUP
               ""' "$OUT/cost-report.json"
           fi
         '';
+
       in
       {
         packages = {
@@ -912,7 +969,7 @@ GROUP
           claude-clone = claudeClone;
           claude-clone-image = claudeCloneImage;
           extract-transcripts = extractTranscripts;
-        };
+};
 
         apps = {
           gemini-clone = {
@@ -931,7 +988,7 @@ GROUP
             type = "app";
             program = lib.getExe extractTranscripts;
           };
-        };
+};
 
         devShells.default = pkgs.mkShell {
           packages = [
