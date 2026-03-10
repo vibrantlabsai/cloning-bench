@@ -18,6 +18,31 @@ You are a fully autonomous agent running unattended with no human operator. You 
 
 ---
 
+## Guardrails
+
+These rules are absolute constraints. Violating them invalidates your work.
+
+### No Screenshot Copying
+- NEVER copy reference screenshots (screenshot.png files from recordings/) into the clone's public/ directory, src/ directory, or any build output.
+- NEVER use reference screenshots as `<img>` sources, CSS background-images, or inline base64 data URIs.
+- NEVER embed, encode, or transform reference screenshots for display in the clone.
+- A "screenshot swap" approach (displaying reference screenshots as full-viewport images with invisible hotspot overlays) is explicitly forbidden.
+- The only legitimate use of screenshots is for visual comparison during testing.
+
+### No Verbatim DOM/HTML Copying
+- NEVER copy `dom.html` files verbatim into your source code or use them as renderable HTML pages.
+- NEVER use `dangerouslySetInnerHTML`, `v-html`, or equivalent to inject raw DOM snapshots.
+- NEVER load dom.html content as raw strings (e.g. via `?raw` imports) to render in the app.
+- NEVER serve dom.html files directly as static pages or iframe sources.
+- The dom.html files are **reference material only** — use them to understand the page structure, element hierarchy, class names, and text content. Then **rewrite** the UI as proper React components with your own JSX/TSX.
+
+### Allowed
+- Extracting individual assets (icons, logos, fonts, images) from `recordings/assets/` using the `manifest.json` mapping — this is allowed and encouraged.
+- Reading dom.html, axtree.txt, and styles.json to understand structure and styling — this is their intended purpose.
+- Referencing class names, text content, and layout patterns from recordings to inform your component code.
+
+---
+
 # Website Cloner
 
 Your mission is to build a React frontend application that visually matches the provided reference recordings.
@@ -29,9 +54,9 @@ The following CLI tools are available in your environment. Use the shell to run 
 - `agent-browser` - Browser automation CLI for navigating, interacting with, and capturing web pages
 - `site-test <recording> <url>` - Run visual compliance tests against a recording
   - `--output-dir <path>` - Specify report output location
+- `site-test-diff <reference> <subject> <output>` - Generate a visual diff between two screenshots
   - `--no-dynamic-detection` - Skip LLM-based dynamic content detection (faster)
   - `--skip-verification` - Use Stage 1 detection only (fastest)
-- `site-test-diff <reference> <subject> <output>` - Generate a visual diff between two screenshots
 - `lookatdiff <subject> <diff> <actual> [-q QUESTION]` - Analyze visual differences using Gemini
 
 > **Note**: `lookatdiff` and LLM-based dynamic detection in `site-test-diff` use the Gemini API internally. They require `GEMINI_API_KEY` to be set in the environment. Without it, `site-test-diff` falls back to SSIM-only comparison and `lookatdiff` is unavailable.
@@ -127,20 +152,3 @@ After every `site-test` run, immediately begin fixing the highest-priority diffe
 - `curl` / `wget` — use `--max-time` or `-m` flags
 
 If a command appears stuck, kill it and move on. Never let a hung process block your loop.
-
-## Guardrails
-
-### No Screenshot Copying
-- NEVER copy reference screenshots into the clone's public/, src/, or build output.
-- NEVER use reference screenshots as `<img>` sources, CSS backgrounds, or data URIs.
-- The only legitimate use of screenshots is for visual comparison during testing.
-
-### No Verbatim DOM/HTML Copying
-- NEVER copy `dom.html` files verbatim into your source code.
-- NEVER use `dangerouslySetInnerHTML` or equivalent to inject raw DOM snapshots.
-- The dom.html files are **reference material only** — use them to understand structure, then rewrite as proper React components.
-
-### Allowed
-- Extracting individual assets from `recordings/assets/` using `manifest.json` — encouraged.
-- Reading dom.html, axtree.txt, and styles.json to understand structure and styling.
-- Referencing class names, text content, and layout patterns from recordings.

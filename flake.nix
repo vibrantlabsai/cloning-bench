@@ -148,15 +148,6 @@
           cd /workspace
           WORKSPACE_ROOT="$PWD"
 
-          # Copy agent config (baked into image at /agent-config/)
-          if [ ! -f GEMINI.md ]; then
-            cp /agent-config/GEMINI.md ./
-          fi
-          if [ ! -d .gemini ]; then
-            cp -r /agent-config/.gemini ./
-            chmod -R u+w ./.gemini
-          fi
-
           # Recordings are bind-mounted at /workspace/recordings (read-only)
 
           # Isolate Gemini global config
@@ -179,6 +170,17 @@
           mkdir -p clone
           ln -sfn ../recordings clone/recordings
           cd clone
+
+          # Copy agent config into clone/ (the actual CWD where Gemini runs).
+          # Gemini CLI discovers GEMINI.md by walking up from CWD to the .git
+          # root. Placing it here ensures it is found even if git init occurs.
+          if [ ! -f GEMINI.md ]; then
+            cp /agent-config/GEMINI.md ./
+          fi
+          if [ ! -d .gemini ]; then
+            cp -r /agent-config/.gemini ./
+            chmod -R u+w ./.gemini
+          fi
 
           # Auto-continue watchdog: monitors Gemini session files for model completion
           # and sends a "continue" message when the model stops
@@ -372,19 +374,6 @@ GROUP
           cd /workspace
           WORKSPACE_ROOT="$PWD"
 
-          # Copy agent config (baked into image at /agent-config/)
-          if [ ! -f AGENTS.md ]; then
-            cp /agent-config/AGENTS.md ./
-          fi
-          if [ ! -d .codex ]; then
-            cp -r /agent-config/.codex ./
-            chmod -R u+w ./.codex
-          fi
-          if [ ! -d .agents ]; then
-            cp -r /agent-config/.agents ./
-            chmod -R u+w ./.agents
-          fi
-
           # Recordings are bind-mounted at /workspace/recordings (read-only)
 
           # Isolate Codex global config
@@ -407,6 +396,29 @@ CODEXCFG
           mkdir -p clone
           ln -sfn ../recordings clone/recordings
           cd clone
+
+          # Copy agent config into clone/ (the actual CWD where Codex runs).
+          # Codex discovers AGENTS.md relative to the Git root / CWD, so it
+          # must be here — not in the parent /workspace/ directory.
+          if [ ! -f AGENTS.md ]; then
+            cp /agent-config/AGENTS.md ./
+          fi
+          if [ ! -d .codex ]; then
+            cp -r /agent-config/.codex ./
+            chmod -R u+w ./.codex
+          fi
+          if [ ! -d .agents ]; then
+            cp -r /agent-config/.agents ./
+            chmod -R u+w ./.agents
+          fi
+
+          # Initialize a Git repo so Codex's project-root detection works
+          # and it properly discovers AGENTS.md in this directory.
+          if [ ! -d .git ]; then
+            git init -q
+            git add -A
+            git commit -q -m "initial" --allow-empty
+          fi
 
           # Auto-continue watchdog: monitors session files for task_complete events
           # and sends a "continue" message to the codex TUI when the model stops

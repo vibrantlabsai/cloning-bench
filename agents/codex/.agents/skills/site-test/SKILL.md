@@ -23,8 +23,6 @@ site-test <recording_folder> <url>
 
 **Options:**
 - `--output-dir <path>` - Where to write the test report (default: auto-generated)
-- `--no-dynamic-detection` - Skip LLM-based dynamic content detection (faster)
-- `--skip-verification` - Use Stage 1 detection only (fastest)
 - `--screenplay <path>` - Custom screenplay file (auto-discovered by default)
 
 **What it does:**
@@ -50,7 +48,6 @@ site-test <recording_folder> <url>
 **Example:**
 ```bash
 site-test ./recordings/0 http://localhost:5173
-site-test ./recordings/0 http://localhost:5173 --no-dynamic-detection
 site-test ./recordings/0 http://localhost:5173 --output-dir ./test-results
 ```
 

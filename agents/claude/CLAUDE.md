@@ -9,9 +9,9 @@ The following CLI tools are available in your environment. Use the shell to run 
 - `agent-browser` - Browser automation CLI for navigating, interacting with, and capturing web pages
 - `site-test <recording> <url>` - Run visual compliance tests against a recording
   - `--output-dir <path>` - Specify report output location
+- `site-test-diff <reference> <subject> <output>` - Generate a visual diff between two screenshots
   - `--no-dynamic-detection` - Skip LLM-based dynamic content detection (faster)
   - `--skip-verification` - Use Stage 1 detection only (fastest)
-- `site-test-diff <reference> <subject> <output>` - Generate a visual diff between two screenshots
 - `lookatdiff <subject> <diff> <actual> [-q QUESTION]` - Analyze visual differences using Gemini
 
 > **Note**: `lookatdiff` and LLM-based dynamic detection in `site-test-diff` use the Gemini API internally. They require `GEMINI_API_KEY` to be set in the environment. Without it, `site-test-diff` falls back to SSIM-only comparison and `lookatdiff` is unavailable.
