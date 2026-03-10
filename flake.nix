@@ -556,15 +556,6 @@ GROUP
           cd /workspace
           WORKSPACE_ROOT="$PWD"
 
-          # Copy agent config (baked into image at /agent-config/)
-          if [ ! -f CLAUDE.md ]; then
-            cp /agent-config/CLAUDE.md ./
-          fi
-          if [ ! -d .claude ]; then
-            cp -r /agent-config/.claude ./
-            chmod -R u+w ./.claude
-          fi
-
           # Recordings are bind-mounted at /workspace/recordings (read-only)
 
           # Isolate Claude global config
@@ -576,6 +567,16 @@ GROUP
           mkdir -p clone
           ln -sfn ../recordings clone/recordings
           cd clone
+
+          # Copy agent config into clone/ (the actual CWD where Claude runs).
+          # Claude Code discovers CLAUDE.md relative to the Git root / CWD.
+          if [ ! -f CLAUDE.md ]; then
+            cp /agent-config/CLAUDE.md ./
+          fi
+          if [ ! -d .claude ]; then
+            cp -r /agent-config/.claude ./
+            chmod -R u+w ./.claude
+          fi
 
           # Write a wrapper script that runs claude in a loop
           # First run: fresh conversation with original prompt

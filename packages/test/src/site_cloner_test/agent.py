@@ -1,6 +1,7 @@
 """Claude Agent SDK integration for test execution."""
 
 import os
+import tempfile
 from pathlib import Path
 from typing import Callable
 
@@ -58,10 +59,16 @@ Remember to:
 Begin execution now.
 """
 
+    # Give the test subprocess its own config directory to avoid contention
+    # with any other Claude CLI instance running in the same container.
+    # Without this, two instances fight over .claude.json locks and MCP ports.
+    test_config_dir = tempfile.mkdtemp(prefix="claude-test-")
+
     env = {
         "CHROMIUM_PATH": chromium_path or "",
         "IS_SANDBOX": "1",
         "HOME": "/home/agent" if os.getuid() == 0 else os.environ.get("HOME", ""),
+        "CLAUDE_CONFIG_DIR": test_config_dir,
     }
 
     # When running as root (e.g. inside Docker), Claude CLI refuses
@@ -70,10 +77,12 @@ Begin execution now.
     user = "agent" if os.getuid() == 0 else None
     if user:
         import subprocess
-        # Ensure the agent user can write to the report dir and its HOME
+        # Ensure the agent user can write to the report dir, its HOME,
+        # and the isolated config dir
         subprocess.run(["chown", "-R", "agent:agent", str(report_dir)], check=False)
         subprocess.run(["mkdir", "-p", "/home/agent"], check=False)
         subprocess.run(["chown", "-R", "agent:agent", "/home/agent"], check=False)
+        subprocess.run(["chown", "-R", "agent:agent", test_config_dir], check=False)
 
     options = ClaudeAgentOptions(
         system_prompt=system_prompt,

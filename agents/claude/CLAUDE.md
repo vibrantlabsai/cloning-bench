@@ -2,6 +2,29 @@
 
 You are an autonomous agent. Your mission is to build a React frontend application that visually matches the provided reference recordings.
 
+## Guardrails
+
+These rules are absolute constraints. Violating them invalidates your work.
+
+### No Screenshot Copying
+- NEVER copy reference screenshots (screenshot.png files from recordings/) into the clone's public/ directory, src/ directory, or any build output.
+- NEVER use reference screenshots as `<img>` sources, CSS background-images, or inline base64 data URIs.
+- NEVER embed, encode, or transform reference screenshots for display in the clone.
+- A "screenshot swap" approach (displaying reference screenshots as full-viewport images with invisible hotspot overlays) is explicitly forbidden.
+- The only legitimate use of screenshots is for visual comparison during testing.
+
+### No Verbatim DOM/HTML Copying
+- NEVER copy `dom.html` files verbatim into your source code or use them as renderable HTML pages.
+- NEVER use `dangerouslySetInnerHTML`, `v-html`, or equivalent to inject raw DOM snapshots.
+- NEVER load dom.html content as raw strings (e.g. via `?raw` imports) to render in the app.
+- NEVER serve dom.html files directly as static pages or iframe sources.
+- The dom.html files are **reference material only** — use them to understand the page structure, element hierarchy, class names, and text content. Then **rewrite** the UI as proper React components with your own JSX/TSX.
+
+### Allowed
+- Extracting individual assets (icons, logos, fonts, images) from `recordings/assets/` using the `manifest.json` mapping — this is allowed and encouraged.
+- Reading dom.html, axtree.txt, and styles.json to understand the structure and styling — this is their intended purpose.
+- Referencing class names, text content, and layout patterns from the recordings to inform your component code.
+
 ## Tools
 
 The following CLI tools are available in your environment. Use the shell to run them.
@@ -123,23 +146,3 @@ Always use sensible timeouts on commands that can block or hang:
 - Any process you spawn in the background — check on it periodically, don't wait indefinitely
 
 If a command appears stuck, kill it (`kill %1`, `pkill -f ...`) and move on. Do not let a hung process block your iteration loop.
-
-## Guardrails
-
-### No Screenshot Copying
-- NEVER copy reference screenshots (screenshot.png files from recordings/) into the clone's public/ directory, src/ directory, or any build output.
-- NEVER use reference screenshots as `<img>` sources, CSS background-images, or inline base64 data URIs.
-- NEVER embed, encode, or transform reference screenshots for display in the clone.
-- The only legitimate use of screenshots is for visual comparison during testing.
-
-### No Verbatim DOM/HTML Copying
-- NEVER copy `dom.html` files verbatim into your source code or use them as renderable HTML pages.
-- NEVER use `dangerouslySetInnerHTML`, `v-html`, or equivalent to inject raw DOM snapshots.
-- NEVER load dom.html content as raw strings (e.g. via `?raw` imports) to render in the app.
-- NEVER serve dom.html files directly as static pages or iframe sources.
-- The dom.html files are **reference material only** — use them to understand the page structure, element hierarchy, class names, and text content. Then **rewrite** the UI as proper React components with your own JSX/TSX.
-
-### Allowed
-- Extracting individual assets (icons, logos, fonts, images) from `recordings/assets/` using the `manifest.json` mapping — this is allowed and encouraged.
-- Reading dom.html, axtree.txt, and styles.json to understand the structure and styling — this is their intended purpose.
-- Referencing class names, text content, and layout patterns from the recordings to inform your component code.
