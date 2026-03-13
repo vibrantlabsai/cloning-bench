@@ -49,3 +49,15 @@ screenshot-archive/
 full-run*/
 
 run-*-transcripts/
+
+# Secrets / credentials
+*.pem
+*.key
+*-sa-key.json
+**/auth.json
+**/.codex-home/
+**/.pi-home/
+**/shell_snapshots/
+.env
+.env.*
+!.env.example

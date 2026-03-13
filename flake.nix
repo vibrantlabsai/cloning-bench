@@ -88,12 +88,15 @@
 
         claudeCli = pkgs.callPackage ./agents/claude/nix { };
 
+        piCli = pkgs.callPackage ./agents/glm/nix { };
+
         CHROMIUM_EXECUTABLE = lib.getExe pkgs.chromium;
 
         # Agent template directories (copied into workspace at runtime)
         agentDir = ./agents/gemini;
         codexAgentDir = ./agents/codex;
         claudeAgentDir = ./agents/claude;
+        glmAgentDir = ./agents/glm;
 
         # --- Docker container infrastructure ---
 
@@ -684,6 +687,249 @@ GROUP
             --cap-add SYS_ADMIN \
             "$IMAGE"
         '';
+
+        # --- GLM (Pi harness): entrypoint, image, launcher ---
+
+        glmEntrypoint = pkgs.writeShellScriptBin "glm-clone-entrypoint" ''
+          set -euo pipefail
+
+          export PROMPT="$(cat /prompt.txt)"
+          export NODE_OPTIONS="--max-old-space-size=16384"
+          cd /workspace
+          WORKSPACE_ROOT="$PWD"
+
+          # Recordings are bind-mounted at /workspace/recordings (read-only)
+
+          # Isolate Pi global config
+          export PI_CODING_AGENT_DIR="$WORKSPACE_ROOT/.pi-home"
+          mkdir -p "$PI_CODING_AGENT_DIR"
+
+          # Configure Fireworks provider for GLM-5
+          cat > "$PI_CODING_AGENT_DIR/models.json" << 'MODELS'
+{"providers":{"fireworks":{"baseUrl":"https://api.fireworks.ai/inference/v1","api":"openai-completions","apiKey":"FIREWORKS_KEY_PLACEHOLDER","models":[{"id":"accounts/fireworks/models/glm-5","name":"GLM-5","reasoning":true,"input":["text"],"contextWindow":203000,"maxTokens":16384,"cost":{"input":0.72,"output":2.30,"cacheRead":0.36,"cacheWrite":0}}]}}}
+MODELS
+          # Inject actual API key (heredoc is single-quoted to avoid shell expansion of JSON)
+          sed -i "s/FIREWORKS_KEY_PLACEHOLDER/$FIREWORKS_API_KEY/" "$PI_CODING_AGENT_DIR/models.json"
+
+          export SITE_TEST_ARCHIVE_DIR="$WORKSPACE_ROOT/screenshot-archive"
+
+          mkdir -p clone
+          ln -sfn ../recordings clone/recordings
+          cd clone
+
+          # Copy agent config into clone/ (the actual CWD where Pi runs).
+          # Pi discovers AGENTS.md by walking up from CWD to the .git root.
+          if [ ! -f AGENTS.md ]; then
+            cp /agent-config/AGENTS.md ./
+          fi
+          if [ ! -d .pi ]; then
+            cp -r /agent-config/.pi ./
+            chmod -R u+w ./.pi
+          fi
+
+          # Initialize a Git repo so Pi's project-root detection works
+          if [ ! -d .git ]; then
+            git config --global user.email "agent@cloning-bench"
+            git config --global user.name "Agent"
+            git init -q
+            git add -A
+            git commit -q -m "initial" --allow-empty
+          fi
+
+          # Auto-continue watchdog: monitors Pi session files for staleness
+          # and sends a "continue" message when the model stops.
+          #
+          # Two thresholds:
+          #   STALE_THRESHOLD (120s) — nudge if idle at prompt (no spinner)
+          #   FORCE_THRESHOLD (300s) — force-abort via Escape even if spinner is
+          #     showing, because Pi's bash tool can get stuck on backgrounded
+          #     processes (e.g. `npm run dev &`)
+          cat > /tmp/watchdog.sh << 'WATCHDOG'
+#!/usr/bin/env bash
+PI_HOME="$PI_CODING_AGENT_DIR"
+CONTINUE_MSG="Continue iterating. Run site-test, analyze results, fix issues. Never stop."
+LAST_NUDGE=0
+STALE_THRESHOLD=120   # seconds — soft threshold (only nudge if no spinner)
+FORCE_THRESHOLD=180   # seconds — hard threshold (send Escape + nudge regardless)
+
+sleep 60  # Wait for initial startup
+
+while true; do
+          NOW=$(date +%s)
+
+          # --- Crash recovery: if pi process died, restart it ---
+          PI_ALIVE=0
+          for p in /proc/[0-9]*/cmdline; do
+            if grep -q "pi" "$p" 2>/dev/null && ! grep -q "watchdog" "$p" 2>/dev/null; then
+              PI_ALIVE=1
+              break
+            fi
+          done
+          if [ "$PI_ALIVE" -eq 0 ]; then
+            echo "[watchdog] Pi process not found, restarting..." >&2
+            sleep 5
+            tmux send-keys -t agent "${lib.getExe piCli} --provider fireworks --model accounts/fireworks/models/glm-5 \"\$PROMPT\"" C-m 2>/dev/null
+            sleep 30
+            continue
+          fi
+
+          # --- Staleness detection ---
+          LATEST=$(find "$PI_HOME/sessions" -name '*.jsonl' -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-)
+
+          if [ -n "$LATEST" ]; then
+            CURRENT_MTIME=$(stat -c %Y "$LATEST" 2>/dev/null || echo 0)
+            AGE=$((NOW - CURRENT_MTIME))
+            SINCE_NUDGE=$((NOW - LAST_NUDGE))
+
+            # Only act if we haven't nudged recently (avoid spamming)
+            if [ "$SINCE_NUDGE" -gt 60 ]; then
+              TMUX_CONTENT=$(tmux capture-pane -t agent -p 2>/dev/null)
+              HAS_SPINNER=0
+              if echo "$TMUX_CONTENT" | grep -qE "⠋|⠙|⠹|⠸|⠼|⠴|⠦|⠧|⠇|⠏|Working"; then
+                HAS_SPINNER=1
+              fi
+
+              # Check if a long-running but legitimate command is active
+              # (site-test, agent-browser, chromium can take many minutes)
+              LONG_CMD_ACTIVE=0
+              if pgrep -f "site-test|agent-browser|chromium" >/dev/null 2>&1; then
+                LONG_CMD_ACTIVE=1
+              fi
+
+              if [ "$AGE" -gt "$FORCE_THRESHOLD" ] && [ "$LONG_CMD_ACTIVE" -eq 0 ]; then
+                # Hard threshold: Pi has been stuck for too long with no
+                # legitimate long-running process active.  This happens when
+                # Pi's bash tool hangs on a backgrounded process (e.g.
+                # `npm run dev &`).  Send Escape to abort, then nudge.
+                echo "[watchdog] FORCE abort - session stale $AGE s (>$FORCE_THRESHOLD s), sending Escape + continue" >&2
+                LAST_NUDGE=$NOW
+                tmux send-keys -t agent Escape 2>/dev/null
+                sleep 5
+                tmux send-keys -t agent -l "$CONTINUE_MSG"
+                sleep 1
+                tmux send-keys -t agent C-m
+
+              elif [ "$AGE" -gt "$FORCE_THRESHOLD" ] && [ "$LONG_CMD_ACTIVE" -eq 1 ]; then
+                echo "[watchdog] Stale $AGE s but long-running command active, skipping force abort" >&2
+
+              elif [ "$AGE" -gt "$STALE_THRESHOLD" ] && [ "$HAS_SPINNER" -eq 0 ]; then
+                # Soft threshold: session is stale and no spinner visible - Pi
+                # is likely idle at its input prompt.
+                echo "[watchdog] Nudging idle agent (age=$AGE s, no spinner)" >&2
+                LAST_NUDGE=$NOW
+                tmux send-keys -t agent -l "$CONTINUE_MSG"
+                sleep 1
+                tmux send-keys -t agent C-m
+
+              elif [ "$AGE" -gt "$STALE_THRESHOLD" ] && [ "$HAS_SPINNER" -eq 1 ]; then
+                echo "[watchdog] Spinner visible but stale $AGE s - waiting for force threshold ($FORCE_THRESHOLD s)" >&2
+              fi
+            fi
+          fi
+          sleep 15
+done
+WATCHDOG
+          chmod +x /tmp/watchdog.sh
+
+          # Start watchdog in background
+          /tmp/watchdog.sh &
+
+          exec tmux new-session -s agent \
+            "${lib.getExe piCli} --provider fireworks --model accounts/fireworks/models/glm-5 \"\$PROMPT\""
+        '';
+
+        glmContainerEnv = mkContainerEnv "glm-clone" [ piCli ];
+
+        glmCloneImage = pkgs.dockerTools.buildLayeredImage {
+          name = "cloning-bench/glm-clone";
+          tag = "latest";
+
+          contents = commonContainerExtras ++ [
+            glmContainerEnv
+            glmEntrypoint
+          ];
+
+          extraCommands = ''
+            mkdir -p tmp workspace root home/agent
+            chmod 1777 tmp
+            mkdir -p usr/bin && ln -sf ${pkgs.coreutils}/bin/env usr/bin/env
+            mkdir -p agent-config
+            cp ${glmAgentDir}/AGENTS.md agent-config/
+            cp -r ${glmAgentDir}/.pi agent-config/
+
+            # Add non-root agent user for site-test's internal Claude subprocess
+            mkdir -p etc
+            rm -f etc/passwd etc/group
+            cat > etc/passwd <<'PASSWD'
+root:x:0:0:root:/root:/bin/sh
+nobody:x:65534:65534:nobody:/var/empty:/bin/sh
+agent:x:1000:1000:agent:/home/agent:/bin/sh
+PASSWD
+            cat > etc/group <<'GROUP'
+root:x:0:
+nobody:x:65534:
+agent:x:1000:
+GROUP
+          '';
+
+          config = {
+            Entrypoint = [ "${glmEntrypoint}/bin/glm-clone-entrypoint" ];
+            WorkingDir = "/workspace";
+            Env = [
+              "PATH=${glmContainerEnv}/bin"
+              "CHROMIUM_PATH=${CHROMIUM_EXECUTABLE}"
+              "FONTCONFIG_FILE=${containerFontsConf}"
+
+              "HOME=/root"
+              "TERM=xterm-256color"
+              "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
+              "IS_SANDBOX=1"
+              # Bedrock auth for site-test's internal Claude agent
+              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              "CLAUDE_CODE_USE_BEDROCK=1"
+              "AWS_REGION=us-east-1"
+              "ANTHROPIC_MODEL=us.anthropic.claude-sonnet-4-20250514-v1:0"
+            ];
+          };
+        };
+
+        glmClone = pkgs.writeShellScriptBin "glm-clone" ''
+          set -euo pipefail
+
+          if [ -z "''${FIREWORKS_API_KEY:-}" ]; then
+            echo "ERROR: FIREWORKS_API_KEY must be set" >&2
+            exit 1
+          fi
+
+          WORKSPACE="''${1:-.}"
+          shift || true
+          mkdir -p "$WORKSPACE"
+          WORKSPACE="$(cd "$WORKSPACE" && pwd)"
+
+          PROMPT_FILE="$(pwd)/prompt.txt"
+          RECORDINGS_SRC="''${RECORDINGS_DIR:-$(pwd)/recordings}"
+
+          IMAGE="cloning-bench/glm-clone:latest"
+
+          if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+            echo "Loading Docker image $IMAGE..."
+            docker load < ${glmCloneImage}
+          fi
+
+          CONTAINER_NAME="glm-clone-$(basename "$WORKSPACE")"
+
+          exec docker run --rm -t \
+            --name "$CONTAINER_NAME" \
+            -v "$WORKSPACE:/workspace" \
+            -v "$RECORDINGS_SRC:/workspace/recordings:ro" \
+            -v "$PROMPT_FILE:/prompt.txt:ro" \
+            --shm-size=2g \
+            --cap-add SYS_ADMIN \
+            -e FIREWORKS_API_KEY \
+            -e GEMINI_API_KEY \
+            "$IMAGE"
+        '';
+
         # Extract conversation transcripts from a workspace into transcripts/
         extractTranscripts = pkgs.writeShellScriptBin "extract-transcripts" ''
           set -euo pipefail
@@ -747,21 +993,29 @@ GROUP
             FOUND=1
           fi
 
+          # --- GLM (Pi) ---
+          if [ -d .pi-home ]; then
+            echo "Detected GLM/Pi workspace"
+            mkdir -p "$OUT/glm/sessions"
+            # Session JSONL files (organized by working directory path)
+            ${lib.getExe pkgs.findutils} .pi-home/sessions -name '*.jsonl' -exec cp {} "$OUT/glm/sessions/" \; 2>/dev/null || true
+            # Global settings and models config
+            [ -f .pi-home/settings.json ] && cp .pi-home/settings.json "$OUT/glm/"
+            [ -f .pi-home/models.json ] && cp .pi-home/models.json "$OUT/glm/"
+            FOUND=1
+          fi
+
           # --- Common artifacts ---
           # Session timeline
           [ -f session-timeline.log ] && cp session-timeline.log "$OUT/"
 
-          # Site-test results (check both workspace root and clone/)
+          # Site-test results (find all *_test directories anywhere in workspace)
           SITE_TEST_FOUND=0
-          for base in . clone; do
-            for dir in "$base"/*_test/; do
-              if [ -d "$dir" ]; then
-                mkdir -p "$OUT/site-test-results"
-                cp -r "$dir" "$OUT/site-test-results/"
-                SITE_TEST_FOUND=1
-              fi
-            done
-          done
+          while IFS= read -r dir; do
+            mkdir -p "$OUT/site-test-results"
+            cp -r "$dir" "$OUT/site-test-results/"
+            SITE_TEST_FOUND=1
+          done < <(${lib.getExe pkgs.findutils} . -maxdepth 5 -type d -name '*_test' ! -path './transcripts/*' ! -path './.*/sessions/*' 2>/dev/null)
 
           # Screenshot archive
           if [ -d screenshot-archive ]; then
@@ -770,7 +1024,7 @@ GROUP
 
           if [ "$FOUND" -eq 0 ]; then
             echo "No agent state directories found in $WORKSPACE" >&2
-            echo "Expected one of: .codex-home/, .gemini-home/, .claude-home/" >&2
+            echo "Expected one of: .codex-home/, .gemini-home/, .claude-home/, .pi-home/" >&2
             rm -rf "$OUT"
             exit 1
           fi
@@ -841,6 +1095,30 @@ GROUP
               }
             ' "$OUT/claude/sessions/"*.jsonl > "$OUT/claude/token-summary.json" 2>/dev/null || true
             echo "  → claude/token-summary.json"
+          fi
+
+          # GLM/Pi: extract from assistant message usage objects in session JSONL
+          if [ -d "$OUT/glm/sessions" ] && ls "$OUT/glm/sessions/"*.jsonl >/dev/null 2>&1; then
+            echo "Extracting GLM/Pi token usage..."
+            # Extract model name from session data (model_change event or first assistant message)
+            PI_MODEL=$($JQ -r 'select(.type == "model_change") | "\(.provider)/\(.modelId)"' "$OUT/glm/sessions/"*.jsonl 2>/dev/null | tail -1)
+            if [ -z "$PI_MODEL" ] || [ "$PI_MODEL" = "null" ]; then
+              PI_MODEL=$($JQ -r 'select(.type == "message" and .message.model != null) | .message.model' "$OUT/glm/sessions/"*.jsonl 2>/dev/null | head -1)
+            fi
+            PI_MODEL="''${PI_MODEL:-unknown}"
+
+            $JQ -s --arg model "$PI_MODEL" '
+              [.[] | select(.type == "message" and .message.role == "assistant" and .message.usage != null) | .message.usage] |
+              {
+                agent: "glm",
+                model: $model,
+                api_calls: length,
+                input_tokens: (map(.input // .inputTokens // 0) | add),
+                output_tokens: (map(.output // .outputTokens // 0) | add),
+                total_cost: (map(.cost.total // 0) | add)
+              }
+            ' "$OUT/glm/sessions/"*.jsonl > "$OUT/glm/token-summary.json" 2>/dev/null || true
+            echo "  → glm/token-summary.json"
           fi
 
           # --- Cost report ---
@@ -946,6 +1224,23 @@ GROUP
 "
           fi
 
+          if [ -f "$OUT/glm/token-summary.json" ]; then
+            COST_PARTS="$COST_PARTS$($JQ '{
+              agent: .agent,
+              model: .model,
+              tokens: {
+                input: .input_tokens,
+                output: .output_tokens
+              },
+              cost: {
+                total_from_provider: (.total_cost * 100 | round / 100),
+                total: (.total_cost * 100 | round / 100
+                )
+              }
+            }' "$OUT/glm/token-summary.json")
+"
+          fi
+
           if [ -n "$COST_PARTS" ]; then
             echo "$COST_PARTS" | $JQ -s '.' > "$OUT/cost-report.json"
             echo "  → cost-report.json"
@@ -981,6 +1276,9 @@ GROUP
           claude-cli = claudeCli;
           claude-clone = claudeClone;
           claude-clone-image = claudeCloneImage;
+          pi-cli = piCli;
+          glm-clone = glmClone;
+          glm-clone-image = glmCloneImage;
           extract-transcripts = extractTranscripts;
 };
 
@@ -997,6 +1295,10 @@ GROUP
             type = "app";
             program = lib.getExe claudeClone;
           };
+          glm-clone = {
+            type = "app";
+            program = lib.getExe glmClone;
+          };
           extract-transcripts = {
             type = "app";
             program = lib.getExe extractTranscripts;
@@ -1010,6 +1312,7 @@ GROUP
             geminiCli
             codexCli
             claudeCli
+            piCli
           ] ++ (with pkgs; [
             uv
             chromium
