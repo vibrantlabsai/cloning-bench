@@ -324,7 +324,7 @@ GROUP
               "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
               "IS_SANDBOX=1"
               # Bedrock auth for site-test's internal Claude agent
-              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              # AWS_BEARER_TOKEN_BEDROCK is passed via docker run -e at runtime
               "CLAUDE_CODE_USE_BEDROCK=1"
               "AWS_REGION=us-east-1"
               "ANTHROPIC_MODEL=us.anthropic.claude-sonnet-4-20250514-v1:0"
@@ -365,6 +365,7 @@ GROUP
             --shm-size=2g \
             --cap-add SYS_ADMIN \
             -e GEMINI_API_KEY \
+            -e AWS_BEARER_TOKEN_BEDROCK \
             "$IMAGE"
         '';
 
@@ -503,7 +504,7 @@ GROUP
               "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
               "IS_SANDBOX=1"
               # Bedrock auth for site-test's internal Claude agent
-              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              # AWS_BEARER_TOKEN_BEDROCK is passed via docker run -e at runtime
               "CLAUDE_CODE_USE_BEDROCK=1"
               "AWS_REGION=us-east-1"
               "ANTHROPIC_MODEL=us.anthropic.claude-sonnet-4-20250514-v1:0"
@@ -544,6 +545,7 @@ GROUP
             --shm-size=2g \
             --cap-add SYS_ADMIN \
             -e OPENAI_API_KEY \
+            -e AWS_BEARER_TOKEN_BEDROCK \
             "$IMAGE"
         '';
 
@@ -650,7 +652,7 @@ GROUP
               "TERM=xterm-256color"
               "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
               "IS_SANDBOX=1"
-              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              # AWS_BEARER_TOKEN_BEDROCK is passed via docker run -e at runtime
               "CLAUDE_CODE_USE_BEDROCK=1"
               "AWS_REGION=us-east-1"
               "ANTHROPIC_MODEL=us.anthropic.claude-opus-4-6-v1"
@@ -685,6 +687,7 @@ GROUP
             -v "$PROMPT_FILE:/prompt.txt:ro" \
             --shm-size=2g \
             --cap-add SYS_ADMIN \
+            -e AWS_BEARER_TOKEN_BEDROCK \
             "$IMAGE"
         '';
 
@@ -885,7 +888,7 @@ GROUP
               "AGENT_BROWSER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-gpu,--disable-dev-shm-usage"
               "IS_SANDBOX=1"
               # Bedrock auth for site-test's internal Claude agent
-              "AWS_BEARER_TOKEN_BEDROCK=BEDROCK_TOKEN_REMOVED"
+              # AWS_BEARER_TOKEN_BEDROCK is passed via docker run -e at runtime
               "CLAUDE_CODE_USE_BEDROCK=1"
               "AWS_REGION=us-east-1"
               "ANTHROPIC_MODEL=us.anthropic.claude-sonnet-4-20250514-v1:0"
@@ -927,6 +930,7 @@ GROUP
             --cap-add SYS_ADMIN \
             -e FIREWORKS_API_KEY \
             -e GEMINI_API_KEY \
+            -e AWS_BEARER_TOKEN_BEDROCK \
             "$IMAGE"
         '';
 
