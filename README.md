@@ -1,13 +1,29 @@
-# cloning-bench
+# Cloning Bench: Evaluating AI Agents on Visual Website Cloning
 
-A benchmark for evaluating how well autonomous AI agents can clone websites.
-Each agent is given a reference recording of a real website and tasked with
-building a React frontend that visually matches it. Agents run unattended in
-isolated Docker containers with access to browser automation, visual testing
+We introduce Cloning Bench, a benchmark for evaluating how well autonomous AI agents can clone websites.
+Each agent is given a reference recording of a real website (Slack, to start) and is tasked with
+building a React front-end that visually matches it. 
+
+![assertion-0-timelapse-v2 (1)](https://github.com/user-attachments/assets/fcfacbb7-e71b-4c61-9325-0161b442c893)
+
+Agents run unattended in isolated Docker containers with access to browser automation, visual testing
 tools, and the reference material. Results are measured using SSIM (Structural
 Similarity Index) against the original screenshots.
 
-## Quick start
+## Results
+
+<img alt="Model_Performance" src="https://github.com/user-attachments/assets/000193e8-70b4-4a2c-9cc6-bcd78a9dbae3" />
+
+Models were run over a 6-hour time period and SSIM was measured throughout. 
+
+| Rank | Model | Final Avg SSIM | Peak Assertion SSIM | SSIM Improvement | Test Runs | Test Success Rate | Source Lines (JSX) | Source Lines (CSS) | Assets Extracted | Interactive Features |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | **Gemini** | 0.871 | 0.910 | +0.254 | 41 | 71% | 2,194 | 467 (+4.8MB prod) | 62 | None |
+| 2 | **Claude** | 0.757 | 0.790 | +0.142 | 14 | 71% | 925 | 1,657 | 34 | Full |
+| 3 | **GLM** | 0.723 | 0.728 | +0.060 | 91 | 25% | 677 | 998 | 20 | Full |
+| 4 | **Codex** | 0.583 | 0.606 | -0.010 | 46 | 43% | 483 | 782 | 19 | Full |
+
+## Quick Start
 
 ### With Nix (recommended)
 
@@ -212,6 +228,9 @@ This provides:
 - **Node.js 24** for the React build toolchain
 - **Chromium** for headless browser automation
 - **direnv support** — the `.envrc` activates the devshell automatically
+
+## Blogpost
+https://vibrantlabs.com/blog/cloning-bench
 
 ## License
 
